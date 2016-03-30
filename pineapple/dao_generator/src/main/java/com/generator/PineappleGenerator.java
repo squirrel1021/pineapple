@@ -19,8 +19,40 @@ public class PineappleGenerator {
         //注释内容为范例，生成的时候别打开！
         // addNote(schema);
         //addCustomerOrder(schema);
+
+        addUser(schema);
+        addUserAuth(schema);
+
         //用绝对路径找！
         new DaoGenerator().generateAll(schema, "app/src/main/java");
+    }
+
+    /**
+     * @author:keivn
+     * @param schema
+     * one -- many  user -- userAuth
+     */
+    private static void addUser(Schema schema){
+        Entity user = schema.addEntity("User");
+        user.addIdProperty();
+        user.addStringProperty("nickname");
+        user.addStringProperty("avatar");
+        user.addIntProperty("gender");
+        user.addStringProperty("hobbies");
+        user.addStringProperty("jobs");
+    }
+    /**
+     * @author:keivn
+     * @param schema
+     */
+    private static void addUserAuth(Schema schema){
+        Entity userAuth = schema.addEntity("UserAuth");
+        userAuth.addIdProperty();
+        userAuth.addLongProperty("user_id");
+        userAuth.addIntProperty("identity_type");
+        userAuth.addStringProperty("identify_unique_id ");//（手机号 邮箱 用户名或第三方应用的唯一标识）
+        userAuth.addStringProperty("credential"); //credential 密码凭证（站内的保存密码，站外的不保存或保存token）
+        userAuth.addBooleanProperty("verified"); //是否验证，三方登录默认认证了
     }
 
     /**

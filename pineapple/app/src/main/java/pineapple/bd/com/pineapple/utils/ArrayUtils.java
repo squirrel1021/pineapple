@@ -4,9 +4,14 @@
 
 package pineapple.bd.com.pineapple.utils;
 
-import com.marshalchen.common.commonUtils.logUtils.Logs;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 
 /**
  * Array Utils
@@ -116,21 +121,21 @@ public class ArrayUtils {
     }
 
     /**
-     * @see {@link com.marshalchen.common.commonUtils.basicUtils.ArrayUtils#getLast(Object[], Object, Object, boolean)} defaultValue is null
+     * @see {@link ArrayUtils#getLast(Object[], Object, Object, boolean)} defaultValue is null
      */
     public static <V> V getLast(V[] sourceArray, V value, boolean isCircle) {
         return getLast(sourceArray, value, null, isCircle);
     }
 
     /**
-     * @see {@link com.marshalchen.common.commonUtils.basicUtils.ArrayUtils#getNext(Object[], Object, Object, boolean)} defaultValue is null
+     * @see {@link ArrayUtils#getNext(Object[], Object, Object, boolean)} defaultValue is null
      */
     public static <V> V getNext(V[] sourceArray, V value, boolean isCircle) {
         return getNext(sourceArray, value, null, isCircle);
     }
 
     /**
-     * @see {@link com.marshalchen.common.commonUtils.basicUtils.ArrayUtils#getLast(Object[], Object, Object, boolean)} Object is Long
+     * @see {@link ArrayUtils#getLast(Object[], Object, Object, boolean)} Object is Long
      */
     public static long getLast(long[] sourceArray, long value, long defaultValue, boolean isCircle) {
         if (sourceArray.length == 0) {
@@ -143,7 +148,7 @@ public class ArrayUtils {
     }
 
     /**
-     * @see {@link com.marshalchen.common.commonUtils.basicUtils.ArrayUtils#getNext(Object[], Object, Object, boolean)} Object is Long
+     * @see {@link ArrayUtils#getNext(Object[], Object, Object, boolean)} Object is Long
      */
     public static long getNext(long[] sourceArray, long value, long defaultValue, boolean isCircle) {
         if (sourceArray.length == 0) {
@@ -155,7 +160,7 @@ public class ArrayUtils {
     }
 
     /**
-     * @see {@link com.marshalchen.common.commonUtils.basicUtils.ArrayUtils#getLast(Object[], Object, Object, boolean)} Object is Integer
+     * @see {@link ArrayUtils#getLast(Object[], Object, Object, boolean)} Object is Integer
      */
     public static int getLast(int[] sourceArray, int value, int defaultValue, boolean isCircle) {
         if (sourceArray.length == 0) {
@@ -168,7 +173,7 @@ public class ArrayUtils {
     }
 
     /**
-     * @see {@link com.marshalchen.common.commonUtils.basicUtils.ArrayUtils#getNext(Object[], Object, Object, boolean)} Object is Integer
+     * @see {@link ArrayUtils#getNext(Object[], Object, Object, boolean)} Object is Integer
      */
     public static int getNext(int[] sourceArray, int value, int defaultValue, boolean isCircle) {
         if (sourceArray.length == 0) {

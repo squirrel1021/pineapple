@@ -10,10 +10,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONArray;
+
 import java.util.logging.Logger;
 
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.DeleteListener;
+import cn.bmob.v3.listener.FindCallback;
 import cn.bmob.v3.listener.SaveListener;
+import pineapple.bd.com.pineapple.account.AccountService;
+import pineapple.bd.com.pineapple.account.AccountType;
 import pineapple.bd.com.pineapple.db.User;
+import pineapple.bd.com.pineapple.db.UserAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,32 +43,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        saveUser();
+
+        AccountService.getInstance().register(this,AccountType.PINEAPPLE,"kevin","123456");
+
     }
 
-    private void saveUser() {
-        new Thread(new Runnable() {
+    public void testSaveAuth(){
+//        Bmob.initialize(PineApplication.mContext, "56d23db34c49ab0334c427c034956b15");
+        UserAuth auth = new UserAuth();
+//        auth.setIdentify_unique_id("kevin2");
+//        auth.setIdentity_type(0);
+//        auth.setCredential("123456");
+//        auth.setVerified(true);
+        auth.save(PineApplication.mContext, new SaveListener() {
             @Override
-            public void run() {
-                User user = new User();
-                user.setNickname("kevin");
-                user.setGender(1);
-                user.setHobbies("虐伯翔！");
-                user.save(MainActivity.this, new SaveListener() {
-                    @Override
-                    public void onSuccess() {
-                        Log.e(TAG,"save user onSuccess");
-                    }
-
-                    @Override
-                    public void onFailure(int i, String s) {
-                        Log.e(TAG,"save user onFailure");
-                    }
-                });
+            public void onSuccess() {
+                Log.e(TAG, "save auth onSuccess ");
             }
-        }).start();
 
+            @Override
+            public void onFailure(int i, String s) {
+                Log.e(TAG, "save auth onFailure " + s);
+            }
+        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -40,6 +40,7 @@ public class PineappleGenerator {
         user.addIntProperty("gender");
         user.addStringProperty("hobbies");
         user.addStringProperty("jobs");
+        user.setSuperclass("cn.bmob.v3.BmobObject");
     }
     /**
      * @author:keivn
@@ -48,11 +49,12 @@ public class PineappleGenerator {
     private static void addUserAuth(Schema schema){
         Entity userAuth = schema.addEntity("UserAuth");
         userAuth.addIdProperty();
-        userAuth.addLongProperty("user_id");
+        userAuth.addStringProperty("user_id");
         userAuth.addIntProperty("identity_type");
         userAuth.addStringProperty("identify_unique_id ");//（手机号 邮箱 用户名或第三方应用的唯一标识）
         userAuth.addStringProperty("credential"); //credential 密码凭证（站内的保存密码，站外的不保存或保存token）
         userAuth.addBooleanProperty("verified"); //是否验证，三方登录默认认证了
+        userAuth.setSuperclass("cn.bmob.v3.BmobObject");//别忘了加这句
     }
 
     /**

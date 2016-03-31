@@ -24,7 +24,7 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property User_id = new Property(1, Long.class, "user_id", false, "USER_ID");
+        public final static Property User_id = new Property(1, String.class, "user_id", false, "USER_ID");
         public final static Property Identity_type = new Property(2, Integer.class, "identity_type", false, "IDENTITY_TYPE");
         public final static Property Identify_unique_id  = new Property(3, String.class, "identify_unique_id ", false, "IDENTIFY_UNIQUE_ID ");
         public final static Property Credential = new Property(4, String.class, "credential", false, "CREDENTIAL");
@@ -45,7 +45,7 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER_AUTH\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"USER_ID\" INTEGER," + // 1: user_id
+                "\"USER_ID\" TEXT," + // 1: user_id
                 "\"IDENTITY_TYPE\" INTEGER," + // 2: identity_type
                 "\"IDENTIFY_UNIQUE_ID \" TEXT," + // 3: identify_unique_id 
                 "\"CREDENTIAL\" TEXT," + // 4: credential
@@ -68,9 +68,9 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
             stmt.bindLong(1, id);
         }
  
-        Long user_id = entity.getUser_id();
+        String user_id = entity.getUser_id();
         if (user_id != null) {
-            stmt.bindLong(2, user_id);
+            stmt.bindString(2, user_id);
         }
  
         Integer identity_type = entity.getIdentity_type();
@@ -105,7 +105,7 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
     public UserAuth readEntity(Cursor cursor, int offset) {
         UserAuth entity = new UserAuth( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // user_id
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // user_id
             cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // identity_type
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // identify_unique_id 
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // credential
@@ -118,7 +118,7 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
     @Override
     public void readEntity(Cursor cursor, UserAuth entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setUser_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setUser_id(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setIdentity_type(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
         entity.setIdentify_unique_id (cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCredential(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));

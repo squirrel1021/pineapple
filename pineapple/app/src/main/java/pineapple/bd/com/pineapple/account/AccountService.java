@@ -92,6 +92,7 @@ public class AccountService {
                     @Override
                     public void onSuccess() {
                         userAuth.setUser_id(user.getObjectId());
+                        userAuth.setVerified(true);
                         userAuth.update(context, userAuth.getObjectId(), new UpdateListener() {
                             @Override
                             public void onSuccess() {

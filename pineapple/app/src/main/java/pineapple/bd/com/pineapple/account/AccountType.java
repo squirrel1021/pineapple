@@ -18,7 +18,7 @@ public enum AccountType {
     WEIXIN(3),
     GITHUB(4);
 
-    int value;
+   public int value;
     String identify_unique_id;//平台唯一标识, PINEAPPLE 平台即为用户名
     String nickname;//平台昵称
 

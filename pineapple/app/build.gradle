@@ -22,14 +22,16 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+
+    //bmob-sdk ：Bmob的android sdk包
+    //bmob-sms ：Bmob单独为短信服务提供的包
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'de.greenrobot:greendao:2.1.0'
-
-    //bmob-sdk ：Bmob的android sdk包
     compile 'cn.bmob.android:bmob-sdk:3.4.5'
     compile 'cn.bmob.android:bmob-im:1.1.9'
-    //bmob-sms ：Bmob单独为短信服务提供的包
     compile 'cn.bmob.android:bmob-sms:1.0.1'
+    compile 'com.android.support:support-v4:23.2.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

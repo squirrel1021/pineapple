@@ -22,30 +22,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // used on register!
-       // AccountService.getInstance().register(this,AccountType.PINEAPPLE,"kevin","123456");
-
     }
 
-    public void testSaveAuth(){
-//        Bmob.initialize(PineApplication.mContext, "56d23db34c49ab0334c427c034956b15");
-        UserAuth auth = new UserAuth();
-//        auth.setIdentify_unique_id("kevin2");
-//        auth.setIdentity_type(0);
-//        auth.setCredential("123456");
-//        auth.setVerified(true);
-        auth.save(PineApplication.mContext, new SaveListener() {
-            @Override
-            public void onSuccess() {
-                Log.e(TAG, "save auth onSuccess ");
-            }
 
-            @Override
-            public void onFailure(int i, String s) {
-                Log.e(TAG, "save auth onFailure " + s);
-            }
-        });
-    }
 
 
     @Override

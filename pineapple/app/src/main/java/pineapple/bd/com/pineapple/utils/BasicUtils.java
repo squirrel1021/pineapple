@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Parcelable;
 
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -221,6 +222,13 @@ public class BasicUtils {
     }
 
     public static void sendIntent(Context context, Class classes, String key, Parcelable value) {
+        Intent intent = new Intent();
+        intent.setClass(context, classes);
+        intent.putExtra(key, value);
+        context.startActivity(intent);
+    }
+
+    public static void sendIntent(Context context, Class classes, String key, Serializable value) {
         Intent intent = new Intent();
         intent.setClass(context, classes);
         intent.putExtra(key, value);

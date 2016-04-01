@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="100dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:padding="10dp" >
 
     <android.support.design.widget.TextInputLayout
@@ -27,6 +29,7 @@
         android:layout_marginTop="5dp" >
 
         <pineapple.bd.com.pineapple.widget.ClearEditText
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -34,15 +37,6 @@
             android:hint="@string/login_password_hint" />
     </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:layout_below="@+id/til_password"
-        android:layout_marginTop="100dp"
-        android:id="@+id/commit"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="16dp"
-        android:background="?attr/colorPrimary"
-        android:text="@string/btn_login_text"
-        android:textColor="@android:color/white" />
+
 
 </RelativeLayout>

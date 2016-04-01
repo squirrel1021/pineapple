@@ -8,6 +8,7 @@ public class UserAuth extends cn.bmob.v3.BmobObject  {
 
     private Long id;
     private String user_id;
+    private Integer onLineType;
     private Integer identity_type;
     private String identify_unique_id ;
     private String credential;
@@ -20,9 +21,10 @@ public class UserAuth extends cn.bmob.v3.BmobObject  {
         this.id = id;
     }
 
-    public UserAuth(Long id, String user_id, Integer identity_type, String identify_unique_id , String credential, Boolean verified) {
+    public UserAuth(Long id, String user_id, Integer onLineType, Integer identity_type, String identify_unique_id , String credential, Boolean verified) {
         this.id = id;
         this.user_id = user_id;
+        this.onLineType = onLineType;
         this.identity_type = identity_type;
         this.identify_unique_id  = identify_unique_id ;
         this.credential = credential;
@@ -43,6 +45,14 @@ public class UserAuth extends cn.bmob.v3.BmobObject  {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public Integer getOnLineType() {
+        return onLineType;
+    }
+
+    public void setOnLineType(Integer onLineType) {
+        this.onLineType = onLineType;
     }
 
     public Integer getIdentity_type() {

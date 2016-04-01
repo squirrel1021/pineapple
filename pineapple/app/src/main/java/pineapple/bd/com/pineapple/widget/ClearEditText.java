@@ -14,9 +14,6 @@ import android.view.View;
 import pineapple.bd.com.pineapple.R;
 
 
-/**
- * Created by MrFu on 15/7/30.
- */
 public class ClearEditText extends AppCompatEditText implements View.OnTouchListener, View.OnFocusChangeListener, TextWatcher{
 
     private Drawable mClearTextIcon;

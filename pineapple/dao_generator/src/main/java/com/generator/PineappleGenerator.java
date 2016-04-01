@@ -50,6 +50,7 @@ public class PineappleGenerator {
         Entity userAuth = schema.addEntity("UserAuth");
         userAuth.addIdProperty();
         userAuth.addStringProperty("user_id");
+        userAuth.addIntProperty("onLineType");
         userAuth.addIntProperty("identity_type");
         userAuth.addStringProperty("identify_unique_id ");//（手机号 邮箱 用户名或第三方应用的唯一标识）
         userAuth.addStringProperty("credential"); //credential 密码凭证（站内的保存密码，站外的不保存或保存token）

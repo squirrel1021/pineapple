@@ -25,10 +25,11 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property User_id = new Property(1, String.class, "user_id", false, "USER_ID");
-        public final static Property Identity_type = new Property(2, Integer.class, "identity_type", false, "IDENTITY_TYPE");
-        public final static Property Identify_unique_id  = new Property(3, String.class, "identify_unique_id ", false, "IDENTIFY_UNIQUE_ID ");
-        public final static Property Credential = new Property(4, String.class, "credential", false, "CREDENTIAL");
-        public final static Property Verified = new Property(5, Boolean.class, "verified", false, "VERIFIED");
+        public final static Property OnLineType = new Property(2, Integer.class, "onLineType", false, "ON_LINE_TYPE");
+        public final static Property Identity_type = new Property(3, Integer.class, "identity_type", false, "IDENTITY_TYPE");
+        public final static Property Identify_unique_id  = new Property(4, String.class, "identify_unique_id ", false, "IDENTIFY_UNIQUE_ID ");
+        public final static Property Credential = new Property(5, String.class, "credential", false, "CREDENTIAL");
+        public final static Property Verified = new Property(6, Boolean.class, "verified", false, "VERIFIED");
     };
 
 
@@ -46,10 +47,11 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"USER_AUTH\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"USER_ID\" TEXT," + // 1: user_id
-                "\"IDENTITY_TYPE\" INTEGER," + // 2: identity_type
-                "\"IDENTIFY_UNIQUE_ID \" TEXT," + // 3: identify_unique_id 
-                "\"CREDENTIAL\" TEXT," + // 4: credential
-                "\"VERIFIED\" INTEGER);"); // 5: verified
+                "\"ON_LINE_TYPE\" INTEGER," + // 2: onLineType
+                "\"IDENTITY_TYPE\" INTEGER," + // 3: identity_type
+                "\"IDENTIFY_UNIQUE_ID \" TEXT," + // 4: identify_unique_id 
+                "\"CREDENTIAL\" TEXT," + // 5: credential
+                "\"VERIFIED\" INTEGER);"); // 6: verified
     }
 
     /** Drops the underlying database table. */
@@ -73,24 +75,29 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
             stmt.bindString(2, user_id);
         }
  
+        Integer onLineType = entity.getOnLineType();
+        if (onLineType != null) {
+            stmt.bindLong(3, onLineType);
+        }
+ 
         Integer identity_type = entity.getIdentity_type();
         if (identity_type != null) {
-            stmt.bindLong(3, identity_type);
+            stmt.bindLong(4, identity_type);
         }
  
         String identify_unique_id  = entity.getIdentify_unique_id ();
         if (identify_unique_id  != null) {
-            stmt.bindString(4, identify_unique_id );
+            stmt.bindString(5, identify_unique_id );
         }
  
         String credential = entity.getCredential();
         if (credential != null) {
-            stmt.bindString(5, credential);
+            stmt.bindString(6, credential);
         }
  
         Boolean verified = entity.getVerified();
         if (verified != null) {
-            stmt.bindLong(6, verified ? 1L: 0L);
+            stmt.bindLong(7, verified ? 1L: 0L);
         }
     }
 
@@ -106,10 +113,11 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
         UserAuth entity = new UserAuth( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // user_id
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // identity_type
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // identify_unique_id 
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // credential
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0 // verified
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // onLineType
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // identity_type
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // identify_unique_id 
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // credential
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0 // verified
         );
         return entity;
     }
@@ -119,10 +127,11 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
     public void readEntity(Cursor cursor, UserAuth entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUser_id(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setIdentity_type(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
-        entity.setIdentify_unique_id (cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setCredential(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setVerified(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setOnLineType(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setIdentity_type(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setIdentify_unique_id (cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setCredential(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setVerified(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
      }
     
     /** @inheritdoc */

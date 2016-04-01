@@ -2,6 +2,7 @@ package pineapple.bd.com.pineapple.account;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,7 +12,9 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
+import pineapple.bd.com.pineapple.OnLineType;
 import pineapple.bd.com.pineapple.PineApplication;
+import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.db.User;
 import pineapple.bd.com.pineapple.db.UserAuth;
 
@@ -54,7 +57,7 @@ public class AccountService {
      * @param identify_unique_id Username
      * @param credential         password --- encode
      */
-    public void register(final Context context, final AccountType accountType, final String identify_unique_id, final String credential) {
+    public void register(final Context context, final int accountTypeValue, final String identify_unique_id, final String credential) {
 
         BmobQuery<UserAuth> query = new BmobQuery<>();
         query.addWhereEqualTo("identify_unique_id", identify_unique_id);
@@ -64,12 +67,12 @@ public class AccountService {
                 Log.e(TAG, "onSuccess " + list);
                 if (null == list || list.size() == 0)
                     doRegister();
-                else Toast.makeText(context, "用户名已存在", Toast.LENGTH_LONG).show();
+                else Toast.makeText(context, R.string.username_exist_tip, Toast.LENGTH_LONG).show();
             }
 
             private void doRegister() {
                 final UserAuth userAuth = new UserAuth();
-                userAuth.setIdentity_type(accountType.value);
+                userAuth.setIdentity_type(accountTypeValue);
                 userAuth.setCredential(credential);
                 userAuth.setIdentify_unique_id(identify_unique_id);
                 userAuth.save(context, new SaveListener() {
@@ -93,17 +96,8 @@ public class AccountService {
                     public void onSuccess() {
                         userAuth.setUser_id(user.getObjectId());
                         userAuth.setVerified(true);
-                        userAuth.update(context, userAuth.getObjectId(), new UpdateListener() {
-                            @Override
-                            public void onSuccess() {
-                                Log.e(TAG, "onSuccess createUser " + userAuth.getUser_id());
-                            }
-
-                            @Override
-                            public void onFailure(int i, String s) {
-                                Log.e(TAG, "onFailure createUser " + s);
-                            }
-                        });
+                        updateAuth(context, userAuth);
+                        Toast.makeText(context, R.string.register_success_tip, Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -118,6 +112,59 @@ public class AccountService {
                 Log.e(TAG, "onError " + s);
             }
         });
+    }
+
+    private void updateAuth(Context context, final UserAuth userAuth) {
+        userAuth.update(context, userAuth.getObjectId(), new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                Log.e(TAG, "onSuccess createUser " + userAuth.getUser_id());
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Log.e(TAG, "onFailure createUser " + s);
+            }
+        });
+    }
+
+    public void login(final Context context, final int accountTypeValue, final String identify_unique_id, final String credential) {
+        BmobQuery<UserAuth> query = new BmobQuery<>();
+        query.addWhereEqualTo("identify_unique_id", identify_unique_id);
+        query.findObjects(mContext, new FindListener<UserAuth>() {
+            @Override
+            public void onSuccess(List<UserAuth> list) {
+                Log.e(TAG, "onSuccess " + list);
+                if (null == list || list.size() == 0) {
+                    Toast.makeText(context, R.string.auth_error, Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    UserAuth currentAuth = null;
+                    for (UserAuth uAuth :
+                            list) {
+                        if (credential.equals(uAuth.getCredential()) && accountTypeValue == uAuth.getIdentity_type()) {
+                            uAuth.setOnLineType(OnLineType.ONLINE.value);
+                            updateAuth(context, uAuth);
+                            currentAuth = uAuth;
+                            break;
+                        }
+                    }
+                    if (null == currentAuth) {
+                        Toast.makeText(context, R.string.auth_error, Toast.LENGTH_SHORT).show();
+                    }else{
+                        //TODO local save Auth
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+        });
+
     }
 
 

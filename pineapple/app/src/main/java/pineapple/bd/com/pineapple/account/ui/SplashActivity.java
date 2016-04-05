@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.view.View;
 
+import pineapple.bd.com.pineapple.db.UserAuth;
 import pineapple.bd.com.pineapple.entity.ActionType;
 import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.utils.BasicUtils;
@@ -30,7 +31,7 @@ public class SplashActivity extends Activity {
         findViewById(R.id.btn_login).setOnClickListener(getListener(ActionType.LOGIN));
         //test 时候用来初始化表
 //        new User(1l,"kevin","123",1,"kill bx","code").save(this);
-//        new UserAuth(1l,"123",1,1,"123","123",true).save(this);
+      //  new UserAuth(1l,"123",1,1,"123","123",true,System.currentTimeMillis()).save(this);
     }
 
     @NonNull

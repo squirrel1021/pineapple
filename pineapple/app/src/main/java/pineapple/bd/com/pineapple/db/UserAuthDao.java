@@ -30,6 +30,7 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
         public final static Property Identify_unique_id  = new Property(4, String.class, "identify_unique_id ", false, "IDENTIFY_UNIQUE_ID ");
         public final static Property Credential = new Property(5, String.class, "credential", false, "CREDENTIAL");
         public final static Property Verified = new Property(6, Boolean.class, "verified", false, "VERIFIED");
+        public final static Property Update_time = new Property(7, Long.class, "update_time", false, "UPDATE_TIME");
     };
 
 
@@ -51,7 +52,8 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
                 "\"IDENTITY_TYPE\" INTEGER," + // 3: identity_type
                 "\"IDENTIFY_UNIQUE_ID \" TEXT," + // 4: identify_unique_id 
                 "\"CREDENTIAL\" TEXT," + // 5: credential
-                "\"VERIFIED\" INTEGER);"); // 6: verified
+                "\"VERIFIED\" INTEGER," + // 6: verified
+                "\"UPDATE_TIME\" INTEGER);"); // 7: update_time
     }
 
     /** Drops the underlying database table. */
@@ -99,6 +101,11 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
         if (verified != null) {
             stmt.bindLong(7, verified ? 1L: 0L);
         }
+ 
+        Long update_time = entity.getUpdate_time();
+        if (update_time != null) {
+            stmt.bindLong(8, update_time);
+        }
     }
 
     /** @inheritdoc */
@@ -117,7 +124,8 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // identity_type
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // identify_unique_id 
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // credential
-            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0 // verified
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // verified
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // update_time
         );
         return entity;
     }
@@ -132,6 +140,7 @@ public class UserAuthDao extends AbstractDao<UserAuth, Long> {
         entity.setIdentify_unique_id (cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setCredential(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setVerified(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setUpdate_time(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */

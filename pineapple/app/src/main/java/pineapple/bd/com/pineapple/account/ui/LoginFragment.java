@@ -8,10 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.List;
+
 import pineapple.bd.com.pineapple.MainActivity;
 import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.account.AccountService;
+import pineapple.bd.com.pineapple.db.GreenDaoUtils;
 import pineapple.bd.com.pineapple.db.UserAuth;
+import pineapple.bd.com.pineapple.db.UserAuthDao;
 import pineapple.bd.com.pineapple.utils.BasicUtils;
 import pineapple.bd.com.pineapple.utils.OnFragmentInteractionListener;
 
@@ -50,9 +54,16 @@ public class LoginFragment extends Fragment {
         mFragmentLayout = inflater.inflate(R.layout.fragment_register, container, false);
         mBtnCommit = (Button) mFragmentLayout.findViewById(R.id.commit);
         mBtnCommit.setText(R.string.btn_login_text);
+        resumeAuth();
         return mFragmentLayout;
     }
 
+    private void resumeAuth() {
+        List<UserAuth> userAuths = GreenDaoUtils.getSession().getUserAuthDao().queryBuilder().orderDesc(UserAuthDao.Properties.Update_time).list();
+        if(null!=userAuths&&userAuths.size()!=0){
+            ((AuthActivity)getActivity()).setAuth(userAuths.get(0));
+        }
+    }
 
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -76,6 +76,16 @@ public class AuthActivity extends BaseCoverActivity implements OnFragmentInterac
         return null;
     }
 
+    public void setAuth(UserAuth uAuth){
+        mUsername.setText(uAuth.getIdentify_unique_id());
+        try {
+            mPassword.setText(AESUtil.decrypt(key,uAuth.getCredential()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onFragmentInteraction(Bundle intentBundle) {

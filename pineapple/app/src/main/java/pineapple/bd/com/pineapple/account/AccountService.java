@@ -122,6 +122,7 @@ public class AccountService {
     }
 
     private void updateAuth(Context context, final UserAuth userAuth) {
+        userAuth.setUpdate_time(System.currentTimeMillis());
         userAuth.update(context, userAuth.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {

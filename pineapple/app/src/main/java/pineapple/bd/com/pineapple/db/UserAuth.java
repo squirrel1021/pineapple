@@ -13,6 +13,7 @@ public class UserAuth extends cn.bmob.v3.BmobObject  {
     private String identify_unique_id ;
     private String credential;
     private Boolean verified;
+    private Long update_time;
 
     public UserAuth() {
     }
@@ -21,7 +22,7 @@ public class UserAuth extends cn.bmob.v3.BmobObject  {
         this.id = id;
     }
 
-    public UserAuth(Long id, String user_id, Integer onLineType, Integer identity_type, String identify_unique_id , String credential, Boolean verified) {
+    public UserAuth(Long id, String user_id, Integer onLineType, Integer identity_type, String identify_unique_id , String credential, Boolean verified, Long update_time) {
         this.id = id;
         this.user_id = user_id;
         this.onLineType = onLineType;
@@ -29,6 +30,7 @@ public class UserAuth extends cn.bmob.v3.BmobObject  {
         this.identify_unique_id  = identify_unique_id ;
         this.credential = credential;
         this.verified = verified;
+        this.update_time = update_time;
     }
 
     public Long getId() {
@@ -85,6 +87,14 @@ public class UserAuth extends cn.bmob.v3.BmobObject  {
 
     public void setVerified(Boolean verified) {
         this.verified = verified;
+    }
+
+    public Long getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(Long update_time) {
+        this.update_time = update_time;
     }
 
 }

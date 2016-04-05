@@ -1,9 +1,6 @@
 package pineapple.bd.com.pineapple.account;
 
-import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
@@ -12,15 +9,13 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-import de.greenrobot.dao.query.WhereCondition;
-import pineapple.bd.com.pineapple.OnLineType;
+import pineapple.bd.com.pineapple.entity.OnLineType;
 import pineapple.bd.com.pineapple.PineApplication;
 import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.db.GreenDaoUtils;
 import pineapple.bd.com.pineapple.db.User;
 import pineapple.bd.com.pineapple.db.UserAuth;
 import pineapple.bd.com.pineapple.db.UserAuthDao;
-import pineapple.bd.com.pineapple.utils.ArrayUtils;
 import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 
 /**

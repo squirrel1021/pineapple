@@ -205,7 +205,7 @@ public class AccountService {
 
     }
 
-    interface Callback{
+    public interface Callback{
         void onSuccess();
         void onFailure();
     }

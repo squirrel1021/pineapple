@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.view.View;
 
+import pineapple.bd.com.pineapple.PineApplication;
 import pineapple.bd.com.pineapple.db.UserAuth;
 import pineapple.bd.com.pineapple.entity.ActionType;
 import pineapple.bd.com.pineapple.R;
@@ -26,6 +27,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PineApplication.mContext.setActiveContext(SplashActivity.this,SplashActivity.class.getName());
         setContentView(R.layout.activity_splash);
         findViewById(R.id.btn_register).setOnClickListener(getListener(ActionType.REGISTER));
         findViewById(R.id.btn_login).setOnClickListener(getListener(ActionType.LOGIN));

@@ -46,7 +46,6 @@ public class MainActivity extends BaseCoverActivity {
         RecyclerView mListView = (RecyclerView) findViewById(R.id.listView);
         mListView.setLayoutManager(new LinearLayoutManager(this));
         mListView.setAdapter(new CardRecyleViewAdapter(this));
-
     }
 
 
@@ -67,6 +66,7 @@ public class MainActivity extends BaseCoverActivity {
             if (System.currentTimeMillis() - lastClickTime < 2000l) {
                 lastClickTime = System.currentTimeMillis();
                //TODO close activities
+                PineApplication.mContext.onClose();
 
             } else {
                 lastClickTime = System.currentTimeMillis();

@@ -3,6 +3,7 @@ package pineapple.bd.com.pineapple.account;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.EditText;
@@ -14,11 +15,12 @@ import pineapple.bd.com.pineapple.PineApplication;
 import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.db.UserAuth;
 import pineapple.bd.com.pineapple.utils.AESUtil;
+import pineapple.bd.com.pineapple.utils.BaseCoverActivity;
 import pineapple.bd.com.pineapple.utils.BasicUtils;
 import pineapple.bd.com.pineapple.utils.OnFragmentInteractionListener;
 import pineapple.bd.com.pineapple.utils.StringUtils;
 
-public class AuthActivity extends AppCompatActivity implements OnFragmentInteractionListener {
+public class AuthActivity extends BaseCoverActivity implements OnFragmentInteractionListener {
     private static final String TAG = AuthActivity.class.getSimpleName();
     public static final String ACTION_TYPE = "actionType";
     private EditText mUsername;
@@ -40,6 +42,7 @@ public class AuthActivity extends AppCompatActivity implements OnFragmentInterac
     private void setupViews() {
         mUsername = (EditText) findViewById(R.id.et_username);
         mPassword = (EditText) findViewById(R.id.et_password);
+        mPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         if (actionType == ActionType.LOGIN) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance()).commit();
         } else if (actionType == ActionType.REGISTER) {

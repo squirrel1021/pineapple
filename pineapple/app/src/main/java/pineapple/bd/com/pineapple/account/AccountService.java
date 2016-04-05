@@ -57,7 +57,7 @@ public class AccountService {
      * @param identify_unique_id Username
      * @param credential         password --- encode
      */
-    public void register(final Context context, final int accountTypeValue, final String identify_unique_id, final String credential) {
+    public void register(final Context context, final int accountTypeValue, final String identify_unique_id, final String credential,final Callback callback) {
 
         BmobQuery<UserAuth> query = new BmobQuery<>();
         query.addWhereEqualTo("identify_unique_id", identify_unique_id);
@@ -66,11 +66,11 @@ public class AccountService {
             public void onSuccess(List<UserAuth> list) {
                 Log.e(TAG, "onSuccess " + list);
                 if (null == list || list.size() == 0)
-                    doRegister();
+                    doRegister(callback);
                 else Toast.makeText(context, R.string.username_exist_tip, Toast.LENGTH_LONG).show();
             }
 
-            private void doRegister() {
+            private void doRegister(final Callback callback) {
                 final UserAuth userAuth = new UserAuth();
                 userAuth.setIdentity_type(accountTypeValue);
                 userAuth.setCredential(credential);
@@ -79,17 +79,19 @@ public class AccountService {
                     @Override
                     public void onSuccess() {
                         Log.e(TAG, "onSuccess register " + userAuth.getObjectId());
-                        createUser(userAuth);
+                        createUser(userAuth,callback);
                     }
 
                     @Override
                     public void onFailure(int i, String s) {
                         Log.e(TAG, "onFailure register " + s);
+                        if(null!=callback)
+                            callback.onFailure();
                     }
                 });
             }
 
-            private void createUser(final UserAuth userAuth) {
+            private void createUser(final UserAuth userAuth,final Callback callback) {
                 final User user = new User();
                 user.save(context, new SaveListener() {
                     @Override
@@ -98,11 +100,14 @@ public class AccountService {
                         userAuth.setVerified(true);
                         updateAuth(context, userAuth);
                         Toast.makeText(context, R.string.register_success_tip, Toast.LENGTH_LONG).show();
+                        if(null!=callback)
+                            callback.onSuccess();
                     }
 
                     @Override
                     public void onFailure(int i, String s) {
-
+                        if(null!=callback)
+                            callback.onFailure();
                     }
                 });
             }
@@ -110,6 +115,8 @@ public class AccountService {
             @Override
             public void onError(int i, String s) {
                 Log.e(TAG, "onError " + s);
+                if(null!=callback)
+                    callback.onFailure();
             }
         });
     }
@@ -128,7 +135,7 @@ public class AccountService {
         });
     }
 
-    public void login(final Context context, final int accountTypeValue, final String identify_unique_id, final String credential) {
+    public void login(final Context context, final int accountTypeValue, final String identify_unique_id, final String credential,final Callback callback) {
         BmobQuery<UserAuth> query = new BmobQuery<>();
         query.addWhereEqualTo("identify_unique_id", identify_unique_id);
         query.findObjects(mContext, new FindListener<UserAuth>() {
@@ -137,6 +144,8 @@ public class AccountService {
                 Log.e(TAG, "onSuccess " + list);
                 if (null == list || list.size() == 0) {
                     Toast.makeText(context, R.string.auth_error, Toast.LENGTH_SHORT).show();
+                    if(null!=callback)
+                        callback.onFailure();
                     return;
                 } else {
                     UserAuth currentAuth = null;
@@ -151,8 +160,13 @@ public class AccountService {
                     }
                     if (null == currentAuth) {
                         Toast.makeText(context, R.string.auth_error, Toast.LENGTH_SHORT).show();
+                        if(null!=callback)
+                            callback.onFailure();
                     }else{
                         //TODO local save Auth
+                        Toast.makeText(context, R.string.login_success_tip, Toast.LENGTH_SHORT).show();
+                        if(null!=callback)
+                            callback.onSuccess();
                     }
                 }
 
@@ -161,10 +175,16 @@ public class AccountService {
 
             @Override
             public void onError(int i, String s) {
-
+                if(null!=callback)
+                    callback.onFailure();
             }
         });
 
+    }
+
+    interface Callback{
+        void onSuccess();
+        void onFailure();
     }
 
 

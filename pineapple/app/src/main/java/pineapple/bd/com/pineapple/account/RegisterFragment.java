@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import pineapple.bd.com.pineapple.MainActivity;
 import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.db.UserAuth;
+import pineapple.bd.com.pineapple.utils.BasicUtils;
 import pineapple.bd.com.pineapple.utils.OnFragmentInteractionListener;
 
 /**
@@ -80,7 +82,21 @@ public class RegisterFragment extends Fragment {
             public void onClick(View v) {
                 UserAuth uAuth;
                 if(null!= (uAuth = ((AuthActivity)getActivity()).getAuth())){
-                    AccountService.getInstance().register(getActivity(),uAuth.getIdentity_type(),uAuth.getIdentify_unique_id(),uAuth.getCredential());
+                    ((AuthActivity)getActivity()).showProgress();
+                    AccountService.getInstance().register(getActivity(), uAuth.getIdentity_type(), uAuth.getIdentify_unique_id(), uAuth.getCredential(), new AccountService.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            //TODO 跳页面 是否加自动登录！
+                            BasicUtils.sendIntent(getActivity(), MainActivity.class);
+                            ((AuthActivity)getActivity()).hideProgress();
+                            getActivity().finish();
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            ((AuthActivity)getActivity()).hideProgress();
+                        }
+                    });
                 }
 
             }

@@ -14,9 +14,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import java.util.List;
+
 import cn.bmob.v3.listener.SaveListener;
+import pineapple.bd.com.pineapple.db.GreenDaoUtils;
 import pineapple.bd.com.pineapple.db.UserAuth;
+import pineapple.bd.com.pineapple.db.UserAuthDao;
 import pineapple.bd.com.pineapple.utils.BaseCoverActivity;
+import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 
 public class MainActivity extends BaseCoverActivity {
     Button btn_login;
@@ -30,8 +35,9 @@ public class MainActivity extends BaseCoverActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
     }
+
+
 
 
 

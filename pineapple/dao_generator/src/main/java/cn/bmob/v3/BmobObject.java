@@ -22,4 +22,9 @@ public class BmobObject implements Serializable {
     public void setObjectId(String objectId) {
         this.objectId = objectId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

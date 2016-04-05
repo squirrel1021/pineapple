@@ -1,11 +1,15 @@
 package pineapple.bd.com.pineapple.db;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.greenrobot.dao.query.WhereCondition;
+import pineapple.bd.com.pineapple.PineApplication;
 
 import java.util.List;
 
@@ -15,6 +19,10 @@ import java.util.List;
 public class GreenDaoUtils {
 
     static boolean isLog = true;
+
+    static DaoMaster mDaoMaster;
+
+    static String DB_NAME = "pine_db";
 
     public static void setIsLog(boolean isLog) {
         GreenDaoUtils.isLog = isLog;
@@ -28,6 +36,17 @@ public class GreenDaoUtils {
             QueryBuilder.LOG_SQL = false;
             QueryBuilder.LOG_VALUES = false;
         }
+    }
+
+    public static DaoMaster initDaoMaster(String db_name,SQLiteDatabase.CursorFactory factory){
+        DaoMaster.DevOpenHelper dbHelper =  new DaoMaster.DevOpenHelper(PineApplication.mContext, db_name, factory);
+        return mDaoMaster = new DaoMaster(dbHelper.getWritableDatabase());
+    }
+
+    public static DaoSession getSession(){
+        if (null==mDaoMaster)
+            initDaoMaster(DB_NAME,null);
+        return mDaoMaster.newSession();
     }
 
     public static List getList(AbstractDao dao, Property orderProperty, WhereCondition cond, WhereCondition... condMore) {

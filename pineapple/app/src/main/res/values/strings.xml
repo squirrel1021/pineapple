@@ -14,5 +14,6 @@
     <string name="username_exist_tip">用户名已存在</string>
     <string name="register_success_tip">注册成功</string>
     <string name="login_success_tip">登录成功</string>
+    <string name="exit_tips">再按一次退出应用</string>
 
 </resources>

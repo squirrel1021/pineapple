@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -54,6 +56,25 @@ public class MainActivity extends BaseCoverActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
 
+    }
+
+    long lastClickTime;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis() - lastClickTime < 2000l) {
+                lastClickTime = System.currentTimeMillis();
+               //TODO close activities
+
+            } else {
+                lastClickTime = System.currentTimeMillis();
+                Toast.makeText(MainActivity.this, R.string.exit_tips, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 

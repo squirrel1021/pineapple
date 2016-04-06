@@ -1,25 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
-    cardView:cardCornerRadius =  "5dp"
-    cardView:cardElevation = "6dp"
-    android:layout_margin="6dp"
-    cardView:paddingStart="4dp"
-    cardView:paddingEnd="4dp"
-    cardView:cardBackgroundColor="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    cardView:cardBackgroundColor="@android:color/white"
+    cardView:cardCornerRadius="3dp"
+    cardView:cardElevation="6dp">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/ide_card_header"
+            layout="@layout/ide_card_header"></include>
+
+        <TextView
+            android:id="@+id/card_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ide_card_header"
+            android:layout_marginLeft="10dp"
+            android:text="Good friends,good food and a lot of laughs."
+            android:textColor="@color/black_424242"
+            android:textSize="17sp" />
+
         <ImageView
-            android:scaleType="fitCenter"
             android:id="@+id/image"
-            android:src="@mipmap/ic_launcher"
             android:layout_width="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_height="wrap_content" />
+            android:layout_height="150dp"
+            android:layout_below="@+id/card_content"
+            android:layout_marginTop="15dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/pic1" />
+
+        <TextView
+            android:id="@+id/likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:text="7 Likes"
+            android:textColor="@color/grey_9e9e9e"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/likes"
+            android:text="15 Comments"
+            android:textColor="@color/grey_9e9e9e"
+            android:textSize="16sp" />
+
+        <View
+            android:background="@color/grey_d0d0d0"
+            android:id="@+id/divider"
+            android:layout_below="@+id/comments"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"></View>
+        <include
+            android:id="@+id/ide_card_footer"
+            layout="@layout/ide_card_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider"></include>
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

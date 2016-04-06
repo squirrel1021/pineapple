@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+<ImageView
+    android:id="@+id/avatar"
+    android:src="@mipmap/default_avatar"
+    android:layout_centerVertical="true"
+    android:layout_width="55dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="8dp"
+    android:layout_height="55dp" />
+
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@+id/title"
+        android:drawableRight="@android:drawable/arrow_up_float"
+        android:textColor="@color/black_212121"
+        android:layout_toRightOf="@+id/avatar"
+        android:maxLines="1"
+        android:textSize="18sp"
+        android:text="@string/default_card_header_title"
+        android:layout_width="match_parent"
+        android:layout_marginRight="15dp"
+        android:layout_height="42dp" />
+
+    <TextView
+
+        android:textSize="16sp"
+        android:layout_toRightOf="@+id/avatar"
+        android:text="@string/default_card_header_time_location"
+        android:textColor="@color/grey_9e9e9e"
+        android:layout_below="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

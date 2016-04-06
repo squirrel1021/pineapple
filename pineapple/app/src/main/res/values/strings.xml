@@ -15,5 +15,7 @@
     <string name="register_success_tip">注册成功</string>
     <string name="login_success_tip">登录成功</string>
     <string name="exit_tips">再按一次退出应用</string>
+    <string name="default_card_header_title">Ari Grant withCaitlin Winner and 7 others.</string>
+    <string name="default_card_header_time_location">Yesterday * ShenZhen.China</string>
 
 </resources>

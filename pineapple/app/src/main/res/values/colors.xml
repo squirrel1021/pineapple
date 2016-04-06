@@ -7,4 +7,8 @@
     <color name="grey_f0f0f0">#f0f0f0</color>
     <color name="grey_f9f9f9">#f9f9f9</color>
     <color name="grey_d0d0d0">#d0d0d0</color>
+    <color name="grey_9e9e9e">#9e9e9e</color>
+
+    <color name="black_212121">#212121</color>
+    <color name="black_424242">#424242</color>
 </resources>

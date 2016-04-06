@@ -1,32 +1,16 @@
 package pineapple.bd.com.pineapple;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.util.List;
-
-import cn.bmob.v3.listener.SaveListener;
 import pineapple.bd.com.pineapple.adapter.CardRecyleViewAdapter;
-import pineapple.bd.com.pineapple.db.GreenDaoUtils;
-import pineapple.bd.com.pineapple.db.UserAuth;
-import pineapple.bd.com.pineapple.db.UserAuthDao;
+import pineapple.bd.com.pineapple.adapter.ItemVerticalOffsetDecoration;
 import pineapple.bd.com.pineapple.utils.BaseCoverActivity;
-import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 
 public class MainActivity extends BaseCoverActivity {
 
@@ -45,6 +29,7 @@ public class MainActivity extends BaseCoverActivity {
     private void setupList() {
         RecyclerView mListView = (RecyclerView) findViewById(R.id.listView);
         mListView.setLayoutManager(new LinearLayoutManager(this));
+        mListView.addItemDecoration(new ItemVerticalOffsetDecoration(this,R.dimen.item_offset));
         mListView.setAdapter(new CardRecyleViewAdapter(this));
     }
 

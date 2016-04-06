@@ -10,10 +10,13 @@ import android.os.Parcelable;
 
 
 import java.io.Serializable;
+import java.lang.annotation.ElementType;
 import java.text.DecimalFormat;
 import java.util.*;
 
 import pineapple.bd.com.pineapple.utils.logUtils.Logs;
+
+import static java.lang.annotation.ElementType.*;
 
 /**
  * Some Useful Utils
@@ -28,6 +31,7 @@ import pineapple.bd.com.pineapple.utils.logUtils.Logs;
  * <p>{@link #getSharedPreferences(Context, String, String)}</p>
  * <p>{@link #putSharedPreferences(Context, String, String, String)}</p>
  */
+@SuppressWarnings({"unchecked"})
 public class BasicUtils {
     /**
      * Print all items of HashMap(Notice:The value should be or can be convert to String)

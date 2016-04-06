@@ -5,7 +5,9 @@
     cardView:cardCornerRadius =  "5dp"
     cardView:cardElevation = "6dp"
     android:layout_margin="6dp"
-    cardView:cardUseCompatPadding = "true"
+    cardView:paddingStart="4dp"
+    cardView:paddingEnd="4dp"
+    cardView:cardBackgroundColor="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout

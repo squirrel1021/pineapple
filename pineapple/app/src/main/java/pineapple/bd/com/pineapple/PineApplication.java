@@ -24,12 +24,14 @@ import cn.bmob.v3.Bmob;
 public class PineApplication extends Application{
 
     public static PineApplication mContext;
+    private final String BMOB_KEY ="56d23db34c49ab0334c427c034956b15";
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
         // 初始化 Bmob SDK
-        Bmob.initialize(this, "56d23db34c49ab0334c427c034956b15");
+        Bmob.initialize(this, BMOB_KEY);
     }
 
     private ConcurrentHashMap<String, WeakReference<Context>> contextObjects = new ConcurrentHashMap<String, WeakReference<Context>>();

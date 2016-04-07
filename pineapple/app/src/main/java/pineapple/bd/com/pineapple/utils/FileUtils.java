@@ -2,6 +2,7 @@ package pineapple.bd.com.pineapple.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 
 
 import java.io.*;
@@ -10,12 +11,6 @@ import java.util.List;
 
 import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 
-/**
- * TO do something with File,like read ,del etc.
- * User: cym
- * Date: 13-10-23
- * Time: 上午11:01
- */
 public class FileUtils {
     public static String readFilesToString(String fileName) throws IOException {
         File file = new File(fileName);
@@ -106,11 +101,12 @@ public class FileUtils {
      *
      * @param fileName folder
      */
-    public static void createDir(String fileName) throws IOException {
+    public static File createDir(String fileName) throws IOException {
         File dir = new File(fileName);
         Logs.d(fileName + "    " + dir.exists());
         if (!dir.exists())
             dir.mkdir();
+        return dir;
     }/** */
 
     /**
@@ -921,5 +917,24 @@ public class FileUtils {
         File file = new File(path);
         return (file.exists() && file.isFile() ? file.length() : -1);
     }
+
+    /**
+     * 获得以用户名命名的头像的存储路径
+     *
+     * @param userName
+     * @return
+     */
+    public static String getAccountNamePortrait(Context context, String userName) {
+        String name = TextUtils.isEmpty(userName) ? "" : userName;
+        String namePP = name + ".jpg";
+        StringBuffer buffer = new StringBuffer();
+        try {
+            buffer.append(getCurrentDataPath(context,userName)).append('/').append(namePP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer.toString();
+    }
+
 
 }

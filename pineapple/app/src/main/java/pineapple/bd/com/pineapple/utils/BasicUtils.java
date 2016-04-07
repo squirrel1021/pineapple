@@ -337,7 +337,8 @@ public class BasicUtils {
 
     public static boolean judgeNotNull(List list) {
         //return list != null && list.size() > 0 ? true : false;
-        return judgeNotNull(list, null);
+        List[] lists = null;
+        return judgeNotNull(list, lists);
     }
 
     public static boolean judgeNotNull(List list, List... lists) {

@@ -18,4 +18,13 @@
     <string name="default_card_header_title">Ari Grant withCaitlin Winner and 7 others.</string>
     <string name="default_card_header_time_location">Yesterday * ShenZhen.China</string>
 
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+
+    <string name="permission_camera_rationale">Camera permission is needed to show the camera preview.</string>
+    <string name="permission_contacts_rationale">Contacts permissions are needed to demonstrate access to the contacts database.</string>
+    <string name="permission_camera_denied">Camera permission was denied. Please consider granting it in order to access the camera!</string>
+    <string name="permission_camera_never_askagain">Camera permission was denied with never ask again.</string>
+    <string name="button_allow">Allow</string>
+    <string name="button_deny">Deny</string>
 </resources>

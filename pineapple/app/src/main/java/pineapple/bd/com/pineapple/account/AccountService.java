@@ -16,6 +16,7 @@ import pineapple.bd.com.pineapple.db.GreenDaoUtils;
 import pineapple.bd.com.pineapple.db.User;
 import pineapple.bd.com.pineapple.db.UserAuth;
 import pineapple.bd.com.pineapple.db.UserAuthDao;
+import pineapple.bd.com.pineapple.utils.FileUtils;
 import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 
 /**
@@ -168,7 +169,7 @@ public class AccountService {
                 Logs.e(TAG, "onSuccess " + list);
                 if (null == list || list.size() == 0) {
                     Toast.makeText(context, R.string.auth_error, Toast.LENGTH_SHORT).show();
-                    if(null!=callback)
+                    if (null != callback)
                         callback.onFailure();
                     return;
                 } else {
@@ -184,12 +185,12 @@ public class AccountService {
                     }
                     if (null == currentAuth) {
                         Toast.makeText(context, R.string.auth_error, Toast.LENGTH_SHORT).show();
-                        if(null!=callback)
+                        if (null != callback)
                             callback.onFailure();
-                    }else{
-
+                    } else {
+                        PineApplication.mCurrentUserAuth = currentAuth;
                         Toast.makeText(context, R.string.login_success_tip, Toast.LENGTH_SHORT).show();
-                        if(null!=callback)
+                        if (null != callback)
                             callback.onSuccess();
                     }
                 }
@@ -199,12 +200,25 @@ public class AccountService {
 
             @Override
             public void onError(int i, String s) {
-                if(null!=callback)
+                if (null != callback)
                     callback.onFailure();
             }
         });
 
     }
+
+
+    public String getLocalHeaderPath(Context context,String username) {
+        return FileUtils.getAccountNamePortrait(context,username);
+    }
+
+    public String getLocalHeaderTmpPath(Context context,String username) {
+        return FileUtils.getAccountNamePortrait(context,username)
+                + ".tmp";
+    }
+
+
+
 
     public interface Callback{
         void onSuccess();

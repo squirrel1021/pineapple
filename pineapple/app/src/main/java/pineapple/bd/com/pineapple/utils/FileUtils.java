@@ -929,7 +929,7 @@ public class FileUtils {
         String namePP = name + ".jpg";
         StringBuffer buffer = new StringBuffer();
         try {
-            buffer.append(getCurrentDataPath(context,userName)).append('/').append(namePP);
+            buffer.append(getCurrentDataPath(context)).append('/').append(namePP);
         } catch (IOException e) {
             e.printStackTrace();
         }

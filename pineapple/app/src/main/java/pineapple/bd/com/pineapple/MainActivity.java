@@ -68,6 +68,9 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
         setupList();
     }
 
+    /**
+     * 初始化导航栏和抽屉
+     */
     private void setupToolbarAndDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -81,10 +84,29 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
         mNavigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //显示上传头像的对话框
                 showUploadHeaderDialog();
             }
         });
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.take_photo:
+                //检查权限，如果允许调用takePhoto方法
+                MainActivityPermissionsDispatcher.takePhotoWithCheck(this);
+                break;
+            case R.id.choose_albums:
+                choosePicture();
+                break;
+            case R.id.cancel:
+                mDialog.dismiss();
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void setupList() {
@@ -165,6 +187,9 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
         Toast.makeText(this, R.string.permission_camera_never_askagain, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 从相册选择相片
+     */
     protected void choosePicture() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -222,6 +247,11 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
 
     }
 
+    /**
+     * 裁剪图片
+     * @param inData
+     * @param outData
+     */
     private void clipPictrue(Uri inData, Uri outData) {
         Intent intent = new Intent();
         intent.setAction("com.android.camera.action.CROP");
@@ -268,22 +298,5 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.take_photo:
-                MainActivityPermissionsDispatcher.takePhotoWithCheck(this);
 
-                break;
-            case R.id.choose_albums:
-                choosePicture();
-                break;
-            case R.id.cancel:
-                mDialog.dismiss();
-                break;
-
-            default:
-                break;
-        }
-    }
 }

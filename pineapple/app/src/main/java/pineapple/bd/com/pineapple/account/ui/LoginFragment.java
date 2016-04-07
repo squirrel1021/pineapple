@@ -58,6 +58,9 @@ public class LoginFragment extends Fragment {
         return mFragmentLayout;
     }
 
+    /**
+     * 回显用户名密码
+     */
     private void resumeAuth() {
         List<UserAuth> userAuths = GreenDaoUtils.getSession().getUserAuthDao().queryBuilder().orderDesc(UserAuthDao.Properties.Update_time).list();
         if(null!=userAuths&&userAuths.size()!=0){
@@ -88,6 +91,13 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        onCommit();
+    }
+
+    /**
+     * 提交表单
+     */
+    private void onCommit() {
         mBtnCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

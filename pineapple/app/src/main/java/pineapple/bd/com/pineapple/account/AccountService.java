@@ -27,7 +27,7 @@ import pineapple.bd.com.pineapple.utils.logUtils.Logs;
  * @version <v1.0>
  * @Editor : KevinLiu
  * @ModifyTime : 2016/3/31 15:02
- * @ModifyDescription : <Content>
+ * @ModifyDescription : 提供和用户账户相关的操作
  */
 public class AccountService {
     public static final String TAG = AccountService.class.getSimpleName();
@@ -37,6 +37,10 @@ public class AccountService {
     private AccountService() {
     }
 
+    /**
+     * 单例模式
+     * @return
+     */
     public static AccountService getInstance() {
         AccountService.mContext = PineApplication.mContext;
         if (null == instance) {
@@ -53,10 +57,9 @@ public class AccountService {
     }
 
     /**
-     * 如果注册类型为自己平台
-     *
-     * @param identify_unique_id Username
-     * @param credential         password --- encode
+     * 如果注册类型为自己平台，则：
+     * @param identify_unique_id  Username
+     * @param credential          password --- encode
      */
     public void register(final Context context, final int accountTypeValue, final String identify_unique_id, final String credential,final Callback callback) {
 
@@ -92,13 +95,18 @@ public class AccountService {
                 });
             }
 
+            /**
+             * 创建用户，并和userAuth用户权限表绑定
+             * @param userAuth
+             * @param callback
+             */
             private void createUser(final UserAuth userAuth, final Callback callback) {
                 final User user = new User();
                 user.save(context, new SaveListener() {
                     @Override
                     public void onSuccess() {
                         userAuth.setUser_id(user.getObjectId());
-                        //userAuth.setVerified(true);
+                        //TODO 激活账户可以通过短信和邮件 后面再加 userAuth.setVerified(true);
                         updateAuth(context, userAuth);
                         Toast.makeText(context, R.string.register_success_tip, Toast.LENGTH_LONG).show();
                         if (null != callback)
@@ -122,44 +130,14 @@ public class AccountService {
         });
     }
 
-    private void updateAuth(Context context, final UserAuth userAuth) {
-        userAuth.setUpdate_time(System.currentTimeMillis());
-        userAuth.update(context, userAuth.getObjectId(), new UpdateListener() {
-            @Override
-            public void onSuccess() {
-                Logs.e(TAG, "onSuccess updateAuth " + userAuth.getUser_id());
-                //TODO local save Auth
-                UserAuthDao dao = GreenDaoUtils.getSession().getUserAuthDao();
-                List<UserAuth> list = dao.queryBuilder().where(UserAuthDao.Properties.Identify_unique_id.eq(userAuth.getIdentify_unique_id()), UserAuthDao.Properties.Credential.eq(userAuth.getCredential())).list();
-                if (null != list && list.size() != 0) {
-                    UserAuth uAuth = list.get(0);
-                    uAuth.setUser_id(userAuth.getUser_id());
-                    uAuth.setVerified(userAuth.getVerified());
-                    uAuth.setOnLineType(userAuth.getOnLineType());
-                    uAuth.setIdentity_type(userAuth.getIdentity_type());
-                    dao.update(uAuth);
-                    //printDb();
-                } else {
-                    dao.insert(userAuth);
-                }
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                Logs.e(TAG, "onFailure createUser " + s);
-            }
-        });
-    }
-
-    void printDb(){
-        List<UserAuth> userAuths = GreenDaoUtils.getSession().getUserAuthDao().loadAll();
-        for (UserAuth uAuth:
-                userAuths) {
-            Logs.e(" username: "+uAuth.getIdentify_unique_id()+" psw: "+uAuth.getCredential()+" onlineType: "+uAuth.getOnLineType()+" verified "+uAuth.getVerified());
-
-        }
-    }
-
+    /**
+     * 标准登录接口
+     * @param context
+     * @param accountTypeValue
+     * @param identify_unique_id
+     * @param credential
+     * @param callback
+     */
     public void login(final Context context, final int accountTypeValue, final String identify_unique_id, final String credential,final Callback callback) {
         BmobQuery<UserAuth> query = new BmobQuery<>();
         query.addWhereEqualTo("identify_unique_id", identify_unique_id);
@@ -207,21 +185,87 @@ public class AccountService {
 
     }
 
+    /**
+     * 更新用户权限表
+     * @param context
+     * @param userAuth
+     */
+    private void updateAuth(Context context, final UserAuth userAuth) {
+        userAuth.setUpdate_time(System.currentTimeMillis());
+        userAuth.update(context, userAuth.getObjectId(), new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                Logs.e(TAG, "onSuccess updateAuth " + userAuth.getUser_id());
+                //TODO local save Auth
+                UserAuthDao dao = GreenDaoUtils.getSession().getUserAuthDao();
+                List<UserAuth> list = dao.queryBuilder().where(UserAuthDao.Properties.Identify_unique_id.eq(userAuth.getIdentify_unique_id()), UserAuthDao.Properties.Credential.eq(userAuth.getCredential())).list();
+                if (null != list && list.size() != 0) {
+                    UserAuth uAuth = list.get(0);
+                    uAuth.setUser_id(userAuth.getUser_id());
+                    uAuth.setVerified(userAuth.getVerified());
+                    uAuth.setOnLineType(userAuth.getOnLineType());
+                    uAuth.setIdentity_type(userAuth.getIdentity_type());
+                    dao.update(uAuth);
+                    //printDb();
+                } else {
+                    dao.insert(userAuth);
+                }
+            }
 
+            @Override
+            public void onFailure(int i, String s) {
+                Logs.e(TAG, "onFailure createUser " + s);
+            }
+        });
+    }
+
+    /**
+     * 打印本地数据库存储数据
+     */
+    void printDb(){
+        List<UserAuth> userAuths = GreenDaoUtils.getSession().getUserAuthDao().loadAll();
+        for (UserAuth uAuth:
+                userAuths) {
+            Logs.e(" username: "+uAuth.getIdentify_unique_id()+" psw: "+uAuth.getCredential()+" onlineType: "+uAuth.getOnLineType()+" verified "+uAuth.getVerified());
+
+        }
+    }
+
+
+    /**
+     * 获取本地头像存储路径，本来打算按用户名建文件夹存储，因 6.0权限限制，暂未作此处理。
+     * @param context
+     * @param username
+     * @return
+     */
     public String getLocalHeaderPath(Context context,String username) {
         return FileUtils.getAccountNamePortrait(context,username);
     }
 
+    /**
+     * 拍照输出 临时图片 和cropUri对应，用来解决部分机型不能正常裁剪
+     * @param context
+     * @param username
+     * @return
+     */
     public String getLocalHeaderTmpPath(Context context,String username) {
         return FileUtils.getAccountNamePortrait(context,username)
                 + ".tmp";
     }
 
 
-
-
+    /**
+     * 访问 BMob 后回调给界面刷新
+     */
     public interface Callback{
+        /**
+         * 成功时回调
+         */
         void onSuccess();
+
+        /**
+         * 失败时回调
+         */
         void onFailure();
     }
 

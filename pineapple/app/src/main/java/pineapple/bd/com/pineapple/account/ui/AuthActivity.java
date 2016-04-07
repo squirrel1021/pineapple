@@ -30,15 +30,23 @@ public class AuthActivity extends BaseCoverActivity implements OnFragmentInterac
         super.onCreate(savedInstanceState);
         actionType = (ActionType)getIntent().getSerializableExtra(ACTION_TYPE);
         setContentView(R.layout.activity_auth);
+        setupToolbar();
+        setupViews();
+    }
+
+    /**
+     * 初始化导航栏
+     */
+    private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setupViews();
     }
 
     private void setupViews() {
         mUsername = (EditText) findViewById(R.id.et_username);
         mPassword = (EditText) findViewById(R.id.et_password);
         mPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        //根据ActionType切换页面
         if (actionType == ActionType.LOGIN) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance()).commit();
         } else if (actionType == ActionType.REGISTER) {
@@ -57,6 +65,10 @@ public class AuthActivity extends BaseCoverActivity implements OnFragmentInterac
 
     private static final String key = "kevin";
 
+    /**
+     * 获取输入框用户名密码，封装成用户认证的实体
+     * @return
+     */
     public UserAuth getAuth() {
         if (StringUtils.isBlank(mUsername.getText().toString().trim()) || StringUtils.isBlank(mPassword.getText().toString().trim())) {
             Toast.makeText(AuthActivity.this, getString(R.string.auth_null), Toast.LENGTH_SHORT).show();
@@ -76,6 +88,10 @@ public class AuthActivity extends BaseCoverActivity implements OnFragmentInterac
         return null;
     }
 
+    /**
+     * 用来自动登录和记住密码功能
+     * @param uAuth
+     */
     public void setAuth(UserAuth uAuth){
         mUsername.setText(uAuth.getIdentify_unique_id());
         try {

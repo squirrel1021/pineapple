@@ -77,6 +77,13 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        onCommit();
+    }
+
+    /**
+     * 提交表单
+     */
+    private void onCommit() {
         mBtnCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

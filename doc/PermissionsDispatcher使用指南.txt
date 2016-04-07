@@ -1,0 +1,5 @@
+https://github.com/hotchemi/PermissionsDispatcher
+
+    需要设置 studio  File/Other Settings/default Settings/Build、Execution、Deployment/Annotation Processors
+来 Enable annotation processing
+这样才能通过注解生成代理类Dispatcher

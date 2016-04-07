@@ -112,7 +112,10 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
     protected static final int RESULT_CODE_CLIP = 324;
 
 
-
+    /**
+     * showRationaleForCamera(final PermissionRequest request) 方法调用后，
+     * request.proceed()则takePhoto()被调用
+     */
     @NeedsPermission(Manifest.permission.CAMERA)
     protected void takePhoto() {
         Intent intent = new Intent();
@@ -123,6 +126,12 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
     }
 
 
+    /**
+     * 若未被授权时，申请运行时权限，弹出选择框供选择
+     *  request.proceed(); 继续
+     *  request.cancel();  取消
+     * @param request
+     */
     @OnShowRationale(Manifest.permission.CAMERA)
     void showRationaleForCamera(final PermissionRequest request) {
         new AlertDialog.Builder(this)
@@ -140,11 +149,17 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
         }).show();
     }
 
+    /**
+     *  button_deny ,request.cancel();
+     */
     @OnPermissionDenied(Manifest.permission.CAMERA)
     void showDeniedForCamera() {
         Toast.makeText(this, R.string.permission_camera_denied, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 勾选禁止询问被调用
+     */
     @OnNeverAskAgain(Manifest.permission.CAMERA)
     void showNeverAskForCamera() {
         Toast.makeText(this, R.string.permission_camera_never_askagain, Toast.LENGTH_SHORT).show();

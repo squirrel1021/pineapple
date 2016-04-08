@@ -7,6 +7,7 @@ package pineapple.bd.com.pineapple.db;
 public class User extends cn.bmob.v3.BmobObject  {
 
     private Long id;
+    private String user_id;
     private String nickname;
     private String avatar;
     private Integer gender;
@@ -20,8 +21,9 @@ public class User extends cn.bmob.v3.BmobObject  {
         this.id = id;
     }
 
-    public User(Long id, String nickname, String avatar, Integer gender, String hobbies, String jobs) {
+    public User(Long id, String user_id, String nickname, String avatar, Integer gender, String hobbies, String jobs) {
         this.id = id;
+        this.user_id = user_id;
         this.nickname = nickname;
         this.avatar = avatar;
         this.gender = gender;
@@ -35,6 +37,14 @@ public class User extends cn.bmob.v3.BmobObject  {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public String getNickname() {

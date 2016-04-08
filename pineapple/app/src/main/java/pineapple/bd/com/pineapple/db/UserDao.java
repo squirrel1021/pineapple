@@ -24,11 +24,12 @@ public class UserDao extends AbstractDao<User, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Nickname = new Property(1, String.class, "nickname", false, "NICKNAME");
-        public final static Property Avatar = new Property(2, String.class, "avatar", false, "AVATAR");
-        public final static Property Gender = new Property(3, Integer.class, "gender", false, "GENDER");
-        public final static Property Hobbies = new Property(4, String.class, "hobbies", false, "HOBBIES");
-        public final static Property Jobs = new Property(5, String.class, "jobs", false, "JOBS");
+        public final static Property User_id = new Property(1, String.class, "user_id", false, "USER_ID");
+        public final static Property Nickname = new Property(2, String.class, "nickname", false, "NICKNAME");
+        public final static Property Avatar = new Property(3, String.class, "avatar", false, "AVATAR");
+        public final static Property Gender = new Property(4, Integer.class, "gender", false, "GENDER");
+        public final static Property Hobbies = new Property(5, String.class, "hobbies", false, "HOBBIES");
+        public final static Property Jobs = new Property(6, String.class, "jobs", false, "JOBS");
     };
 
 
@@ -45,11 +46,12 @@ public class UserDao extends AbstractDao<User, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"NICKNAME\" TEXT," + // 1: nickname
-                "\"AVATAR\" TEXT," + // 2: avatar
-                "\"GENDER\" INTEGER," + // 3: gender
-                "\"HOBBIES\" TEXT," + // 4: hobbies
-                "\"JOBS\" TEXT);"); // 5: jobs
+                "\"USER_ID\" TEXT," + // 1: user_id
+                "\"NICKNAME\" TEXT," + // 2: nickname
+                "\"AVATAR\" TEXT," + // 3: avatar
+                "\"GENDER\" INTEGER," + // 4: gender
+                "\"HOBBIES\" TEXT," + // 5: hobbies
+                "\"JOBS\" TEXT);"); // 6: jobs
     }
 
     /** Drops the underlying database table. */
@@ -68,29 +70,34 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindLong(1, id);
         }
  
+        String user_id = entity.getUser_id();
+        if (user_id != null) {
+            stmt.bindString(2, user_id);
+        }
+ 
         String nickname = entity.getNickname();
         if (nickname != null) {
-            stmt.bindString(2, nickname);
+            stmt.bindString(3, nickname);
         }
  
         String avatar = entity.getAvatar();
         if (avatar != null) {
-            stmt.bindString(3, avatar);
+            stmt.bindString(4, avatar);
         }
  
         Integer gender = entity.getGender();
         if (gender != null) {
-            stmt.bindLong(4, gender);
+            stmt.bindLong(5, gender);
         }
  
         String hobbies = entity.getHobbies();
         if (hobbies != null) {
-            stmt.bindString(5, hobbies);
+            stmt.bindString(6, hobbies);
         }
  
         String jobs = entity.getJobs();
         if (jobs != null) {
-            stmt.bindString(6, jobs);
+            stmt.bindString(7, jobs);
         }
     }
 
@@ -105,11 +112,12 @@ public class UserDao extends AbstractDao<User, Long> {
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nickname
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // avatar
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // gender
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // hobbies
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // jobs
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // user_id
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // nickname
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // avatar
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // gender
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // hobbies
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // jobs
         );
         return entity;
     }
@@ -118,11 +126,12 @@ public class UserDao extends AbstractDao<User, Long> {
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setNickname(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setAvatar(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setGender(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-        entity.setHobbies(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setJobs(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setUser_id(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setNickname(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setAvatar(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setGender(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setHobbies(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setJobs(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     /** @inheritdoc */

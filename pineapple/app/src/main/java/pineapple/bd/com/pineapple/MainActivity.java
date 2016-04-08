@@ -29,7 +29,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.UploadFileListener;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -42,14 +45,17 @@ import pineapple.bd.com.pineapple.adapter.ItemVerticalOffsetDecoration;
 import pineapple.bd.com.pineapple.utils.BaseCoverActivity;
 import pineapple.bd.com.pineapple.utils.BitmapUtil;
 import pineapple.bd.com.pineapple.utils.logUtils.Logs;
+import pineapple.bd.com.pineapple.widget.CircleImageView;
 
 @RuntimePermissions
 public class MainActivity extends BaseCoverActivity implements View.OnClickListener {
 
+    private CircleImageView mHeaderView;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this,requestCode,grantResults);
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -81,7 +87,9 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
                 R.string.drawer_close);
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mNavigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
+        View HeaderLayout = mNavigationView.getHeaderView(0);
+        mHeaderView = (CircleImageView)HeaderLayout.findViewById(R.id.header);
+        HeaderLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //显示上传头像的对话框
@@ -150,8 +158,9 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
 
     /**
      * 若未被授权时，申请运行时权限，弹出选择框供选择
-     *  request.proceed(); 继续
-     *  request.cancel();  取消
+     * request.proceed(); 继续
+     * request.cancel();  取消
+     *
      * @param request
      */
     @OnShowRationale(Manifest.permission.CAMERA)
@@ -172,7 +181,7 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
     }
 
     /**
-     *  button_deny ,request.cancel();
+     * button_deny ,request.cancel();
      */
     @OnPermissionDenied(Manifest.permission.CAMERA)
     void showDeniedForCamera() {
@@ -230,13 +239,7 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
                     break;
 
                 case RESULT_CODE_CLIP:
-                    try {
-                        final Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), saveUri);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    MainActivityPermissionsDispatcher.uploadHeaderWithCheck(this, saveUri);
 
                     break;
                 default:
@@ -247,8 +250,40 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
 
     }
 
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    protected void uploadHeader(final Uri saveUri) {
+        final BmobFile bmobFile = new BmobFile(new File(URI.create(saveUri.toString())));
+        bmobFile.uploadblock(MainActivity.this, new UploadFileListener() {
+
+            @Override
+            public void onSuccess() {
+                // TODO Auto-generated method stub
+                //bmobFile.getUrl()---返回的上传文件的地址（不带域名）
+                //bmobFile.getFileUrl(context)--返回的上传文件的完整地址（带域名）
+                Logs.e("fileUrl:" + bmobFile.getFileUrl(MainActivity.this));
+                PineApplication.mCurrentUser.setAvatar(bmobFile.getFileUrl(MainActivity.this));
+                mAccountService.updateServerUser(MainActivity.this, PineApplication.mCurrentUser);
+                mHeaderView.setImageURI(saveUri);
+            }
+
+            @Override
+            public void onProgress(Integer value) {
+                // TODO Auto-generated method stub
+                // 返回的上传进度（百分比）
+                Logs.e("Progress: " + value + "%");
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                // TODO Auto-generated method stub
+                Logs.e("上传文件失败：" + msg);
+            }
+        });
+    }
+
     /**
      * 裁剪图片
+     *
      * @param inData
      * @param outData
      */
@@ -296,7 +331,6 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
         }
         return super.onKeyDown(keyCode, event);
     }
-
 
 
 }

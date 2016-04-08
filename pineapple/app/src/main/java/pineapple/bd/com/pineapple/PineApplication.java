@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import cn.bmob.v3.Bmob;
+import pineapple.bd.com.pineapple.db.User;
 import pineapple.bd.com.pineapple.db.UserAuth;
 
 /**
@@ -27,7 +28,7 @@ public class PineApplication extends Application{
     public static PineApplication mContext;
     private final String BMOB_KEY ="56d23db34c49ab0334c427c034956b15";
     public static UserAuth mCurrentUserAuth;
-
+    public static User mCurrentUser;
     @Override
     public void onCreate() {
         super.onCreate();

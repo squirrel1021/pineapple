@@ -35,6 +35,7 @@ public class PineappleGenerator {
     private static void addUser(Schema schema){
         Entity user = schema.addEntity("User");
         user.addIdProperty();
+        user.addStringProperty("user_id");
         user.addStringProperty("nickname");
         user.addStringProperty("avatar");
         user.addIntProperty("gender");
@@ -49,7 +50,7 @@ public class PineappleGenerator {
     private static void addUserAuth(Schema schema){
         Entity userAuth = schema.addEntity("UserAuth");
         userAuth.addIdProperty();
-        userAuth.addStringProperty("user_id");
+        userAuth.addStringProperty("user_id"); //对应user的objectId
         userAuth.addIntProperty("onLineType");
         userAuth.addIntProperty("identity_type");
         userAuth.addStringProperty("identify_unique_id ");//（手机号 邮箱 用户名或第三方应用的唯一标识）

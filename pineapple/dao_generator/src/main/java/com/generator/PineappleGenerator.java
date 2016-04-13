@@ -22,9 +22,27 @@ public class PineappleGenerator {
 
         addUser(schema);
         addUserAuth(schema);
+        addMusic(schema);
 
         //用绝对路径找！
         new DaoGenerator().generateAll(schema, "app/src/main/java");
+    }
+
+    private static void addMusic(Schema schema) {
+        Entity music = schema.addEntity("Music");
+        music.addIdProperty();
+        music.addIntProperty("MediaType");//eg: mp3
+        music.addIntProperty("MusicType");//eg:儿歌，英文
+        music.addStringProperty("url");
+        music.addStringProperty("singer");
+        music.addStringProperty("author");
+        music.addStringProperty("poster_url");//海报url
+        music.addStringProperty("lyrics_url");//歌词url
+        music.addStringProperty("name");
+        music.addLongProperty("size");
+        music.addStringProperty("albums");//专辑
+        music.addIntProperty("quality");
+        music.setSuperclass("cn.bmob.v3.BmobObject");
     }
 
     /**

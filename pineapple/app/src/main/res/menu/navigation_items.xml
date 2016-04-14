@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pineapple.bd.com.pineapple.MainActivity">
+    <item
+        android:id="@+id/footprint"
+        android:orderInCategory="100"
+        android:checked="true"
+        android:title="@string/nav_footprint"
+        android:checkable="true"
+        android:icon="@mipmap/menu_footprint"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/interest_tribe"
+        android:orderInCategory="101"
+        android:icon="@mipmap/menu_interest"
+        android:title="@string/nav_interest_tribe"
+        android:checkable="true"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/files_manager"
+        android:orderInCategory="102"
+        android:icon="@mipmap/menu_manager"
+        android:title="@string/nav_files_manager"
+        android:checkable="true"
+        app:showAsAction="always" />
+
+    <item
+        android:icon="@mipmap/menu_settings"
+        android:id="@+id/settings"
+        android:orderInCategory="103"
+        android:title="@string/nav_settings"
+        android:checkable="true"
+        app:showAsAction="always" />
+
+
+</menu>
+

@@ -5,19 +5,17 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -27,9 +25,10 @@ import android.view.Window;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.UploadFileListener;
@@ -40,9 +39,13 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 import pineapple.bd.com.pineapple.account.AccountService;
+import pineapple.bd.com.pineapple.account.ui.SettingsActivity;
 import pineapple.bd.com.pineapple.adapter.CardRecyleViewAdapter;
 import pineapple.bd.com.pineapple.adapter.ItemVerticalOffsetDecoration;
+import pineapple.bd.com.pineapple.http.ImageLoader;
+import pineapple.bd.com.pineapple.interest.ui.InterestActivity;
 import pineapple.bd.com.pineapple.utils.BaseCoverActivity;
+import pineapple.bd.com.pineapple.utils.BasicUtils;
 import pineapple.bd.com.pineapple.utils.BitmapUtil;
 import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 import pineapple.bd.com.pineapple.widget.CircleImageView;
@@ -69,6 +72,7 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PineApplication.mContext.setActiveContext(this,MainActivity.class.getName());
         mAccountService = AccountService.getInstance();
         setupToolbarAndDrawer();
         setupList();
@@ -80,6 +84,19 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
     private void setupToolbarAndDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(true); // 改变item选中状态
+                mDrawerLayout.closeDrawers(); // 关闭导航菜单
+                if(menuItem.getItemId()==R.id.settings){
+                    BasicUtils.sendIntent(MainActivity.this, SettingsActivity.class);
+                }else if(menuItem.getItemId()==R.id.interest_tribe){
+                    BasicUtils.sendIntent(MainActivity.this, InterestActivity.class);
+                }
+                return true;
+            }
+        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,15 +104,57 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
                 R.string.drawer_close);
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        View HeaderLayout = mNavigationView.getHeaderView(0);
-        mHeaderView = (CircleImageView)HeaderLayout.findViewById(R.id.header);
-        HeaderLayout.setOnClickListener(new View.OnClickListener() {
+        View headerLayout = mNavigationView.getHeaderView(0);
+        mHeaderView = (CircleImageView)headerLayout.findViewById(R.id.header);
+        headerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //显示上传头像的对话框
                 showUploadHeaderDialog();
             }
         });
+
+        setHeaderView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Menu menu = mNavigationView.getMenu();
+        int size = menu.size();
+        for (int index=0;index<size;index++) {
+            menu.getItem(index).setChecked(false);
+        }
+        menu.getItem(0).setChecked(true);
+
+    }
+
+    private void setHeaderView() {
+       final String localHeaderPath = mAccountService.getLocalHeaderPath(this,PineApplication.mCurrentUserAuth.getIdentify_unique_id());
+        if(!TextUtils.isEmpty(localHeaderPath)){
+            Uri headerUri = Uri.parse("file:///" + localHeaderPath);
+            if(new File(URI.create(headerUri.toString())).exists()){
+                mHeaderView.setImageURI(headerUri);
+            }else if(!TextUtils.isEmpty(PineApplication.mCurrentUser.getAvatar())){
+                String imageUrl = PineApplication.mCurrentUser.getAvatar();
+                if(!TextUtils.isEmpty(imageUrl)){
+                    ImageLoader imageLoader = new ImageLoader(imageUrl, localHeaderPath);
+                    Future<Boolean> future = Executors.newSingleThreadExecutor().submit(imageLoader);
+                    try {
+                        if(future.get()){
+                            imageLoader.display(mHeaderView);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+            }
+        }
     }
 
     @Override
@@ -222,18 +281,18 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case RESULT_CODE_CAMERA:
-                    clipPictrue(cropUri, saveUri);
+                    clipPicture(cropUri, saveUri);
                     break;
                 case RESULT_CODE_PHOTO:
                     if (data.getData() != null) {
-                        clipPictrue(data.getData(), saveUri);
+                        clipPicture(data.getData(), saveUri);
                     }
 
                     break;
                 case RESULT_CODE_KITKAT_PHOTO:
                     if (data.getData() != null) {
                         String imagePath = BitmapUtil.getPath(this, data.getData());
-                        clipPictrue(Uri.parse("file:///" + imagePath), saveUri);
+                        clipPicture(Uri.parse("file:///" + imagePath), saveUri);
                     }
 
                     break;
@@ -253,6 +312,7 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     protected void uploadHeader(final Uri saveUri) {
         final BmobFile bmobFile = new BmobFile(new File(URI.create(saveUri.toString())));
+        mHeaderView.setImageURI(saveUri);
         bmobFile.uploadblock(MainActivity.this, new UploadFileListener() {
 
             @Override
@@ -263,7 +323,6 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
                 Logs.e("fileUrl:" + bmobFile.getFileUrl(MainActivity.this));
                 PineApplication.mCurrentUser.setAvatar(bmobFile.getFileUrl(MainActivity.this));
                 mAccountService.updateServerUser(MainActivity.this, PineApplication.mCurrentUser);
-                mHeaderView.setImageURI(saveUri);
             }
 
             @Override
@@ -277,6 +336,7 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
             public void onFailure(int code, String msg) {
                 // TODO Auto-generated method stub
                 Logs.e("上传文件失败：" + msg);
+
             }
         });
     }
@@ -287,7 +347,7 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
      * @param inData
      * @param outData
      */
-    private void clipPictrue(Uri inData, Uri outData) {
+    private void clipPicture(Uri inData, Uri outData) {
         Intent intent = new Intent();
         intent.setAction("com.android.camera.action.CROP");
         intent.setDataAndType(inData, "image/*");

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class LoginFragment extends Fragment {
                     AccountService.getInstance().login(getActivity(), uAuth.getIdentity_type(), uAuth.getIdentify_unique_id(), uAuth.getCredential(), new AccountService.Callback() {
                         @Override
                         public void onSuccess() {
-                            //TODO 跳页面
+                            Toast.makeText(getActivity(), R.string.login_success_tip, Toast.LENGTH_SHORT).show();
                             BasicUtils.sendIntent(getActivity(), MainActivity.class);
                             ((AuthActivity)getActivity()).hideProgress();
                             getActivity().finish();

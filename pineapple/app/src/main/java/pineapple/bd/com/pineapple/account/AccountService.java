@@ -1,6 +1,7 @@
 package pineapple.bd.com.pineapple.account;
 
 import android.content.Context;
+import android.os.Handler;
 import android.widget.Toast;
 
 import java.util.List;
@@ -73,9 +74,12 @@ public class AccountService {
             @Override
             public void onSuccess(List<UserAuth> list) {
                 Logs.e(TAG, "onSuccess " + list);
-                if (null == list || list.size() == 0)
+                if (null == list || list.size() == 0) {
                     doRegister(callback);
-                else Toast.makeText(context, R.string.username_exist_tip, Toast.LENGTH_LONG).show();
+                }else {
+                    if (null != callback)
+                        callback.onFailure();
+                    Toast.makeText(context, R.string.username_exist_tip, Toast.LENGTH_LONG).show();}
             }
 
             private void doRegister(final Callback callback) {
@@ -111,22 +115,14 @@ public class AccountService {
                     @Override
                     public void onSuccess() {
                         userAuth.setUser_id(user.getObjectId());
+                        userAuth.setOnLineType(OnLineType.ONLINE.value);
                         user.setUser_id(user.getObjectId());
                         //TODO 激活账户可以通过短信和邮件 后面再加 userAuth.setVerified(true);
-                        updateAuth(context, userAuth, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                login(context, accountTypeValue, identify_unique_id, credential, null);
-                            }
-
-                            @Override
-                            public void onFailure() {
-
-                            }
-                        });
+                        updateAuth(context, userAuth, null);
                         updateLocalUser(user);
-
-                        Toast.makeText(context, R.string.register_success_tip, Toast.LENGTH_LONG).show();
+                        updateServerUser(context,user);
+                        PineApplication.mCurrentUser = user;
+                        PineApplication.mCurrentUserAuth = userAuth;
                         if (null != callback)
                             callback.onSuccess();
                     }
@@ -171,12 +167,12 @@ public class AccountService {
         user.update(context, user.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
-                Logs.e(TAG, "onSuccess updateServerUser ");
+                Logs.e("onSuccess updateServerUser ");
             }
 
             @Override
             public void onFailure(int i, String s) {
-                Logs.e(TAG, "onFailure updateServerUser " + s);
+                Logs.e("onFailure updateServerUser " + s);
             }
         });
     }
@@ -210,7 +206,6 @@ public class AccountService {
                         if (credential.equals(uAuth.getCredential()) && accountTypeValue == uAuth.getIdentity_type()) {
                             uAuth.setOnLineType(OnLineType.ONLINE.value);
                             updateAuth(context, uAuth,null);
-                            syncUser(context, uAuth.getUser_id());
                             currentAuth = uAuth;
                             break;
                         }
@@ -221,9 +216,8 @@ public class AccountService {
                             callback.onFailure();
                     } else {
                         PineApplication.mCurrentUserAuth = currentAuth;
-                        Toast.makeText(context, R.string.login_success_tip, Toast.LENGTH_SHORT).show();
-                        if (null != callback)
-                            callback.onSuccess();
+                        syncUser(context, currentAuth.getUser_id(),callback);
+
                     }
                 }
 
@@ -238,7 +232,12 @@ public class AccountService {
         });
     }
 
-    public void syncUser(final Context context, final String user_id) {
+    public void logout(final Context context,Callback callback){
+        PineApplication.mCurrentUserAuth.setOnLineType(OnLineType.OFFLINE.value);
+        updateAuth(context, PineApplication.mCurrentUserAuth,callback);
+    }
+
+    public void syncUser(final Context context, final String user_id,final Callback callback) {
         BmobQuery<User> userQuery = new BmobQuery<User>();
         userQuery.getObject(context, user_id, new GetListener<User>() {
             @Override
@@ -246,6 +245,8 @@ public class AccountService {
                 Logs.e("syncUser onSuccess");
                 PineApplication.mCurrentUser = user;
                 updateLocalUser(user);
+                if (null != callback)
+                    callback.onSuccess();
             }
 
             @Override
@@ -267,6 +268,7 @@ public class AccountService {
         userAuth.update(context, userAuth.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
+                Logs.e(TAG, "onSuccess updateAuth " );
                 updateLocalAuth(userAuth);
                 if(null!=callback){
                     callback.onSuccess();
@@ -275,7 +277,7 @@ public class AccountService {
 
             @Override
             public void onFailure(int i, String s) {
-                Logs.e(TAG, "onFailure createUser " + s);
+                Logs.e(TAG, "onFailure updateAuth " + s);
                 if(null!=callback){
                     callback.onFailure();
                 }

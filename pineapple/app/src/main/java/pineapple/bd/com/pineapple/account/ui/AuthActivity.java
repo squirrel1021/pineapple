@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import pineapple.bd.com.pineapple.PineApplication;
 import pineapple.bd.com.pineapple.account.entity.AccountType;
 import pineapple.bd.com.pineapple.entity.ActionType;
 import pineapple.bd.com.pineapple.R;
@@ -30,6 +31,7 @@ public class AuthActivity extends BaseCoverActivity implements OnFragmentInterac
         super.onCreate(savedInstanceState);
         actionType = (ActionType)getIntent().getSerializableExtra(ACTION_TYPE);
         setContentView(R.layout.activity_auth);
+        PineApplication.mContext.setActiveContext(this,AuthActivity.class.getName());
         setupToolbar();
         setupViews();
     }

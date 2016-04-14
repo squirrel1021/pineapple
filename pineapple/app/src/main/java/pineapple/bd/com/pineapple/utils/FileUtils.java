@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 
@@ -925,16 +926,23 @@ public class FileUtils {
      * @return
      */
     public static String getAccountNamePortrait(Context context, String userName) {
-        String name = TextUtils.isEmpty(userName) ? "" : userName;
-        String namePP = name + ".jpg";
-        StringBuffer buffer = new StringBuffer();
-        try {
-            buffer.append(getCurrentDataPath(context)).append('/').append(namePP);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(TextUtils.isEmpty(userName)){
+            return "";
+        }else{
+            String namePP = userName + ".jpg";
+            StringBuffer buffer = new StringBuffer();
+            try {
+                buffer.append(getCurrentDataPath(context)).append('/').append(namePP);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return buffer.toString();
         }
-        return buffer.toString();
+
     }
 
+    public static String getGeneratedImagePath(){
+        return UUID.randomUUID().toString()+ ".jpg";
+    }
 
 }

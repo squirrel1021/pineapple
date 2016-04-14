@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import cn.bmob.v3.Bmob;
+import okhttp3.OkHttpClient;
 import pineapple.bd.com.pineapple.db.User;
 import pineapple.bd.com.pineapple.db.UserAuth;
 
@@ -29,10 +30,12 @@ public class PineApplication extends Application{
     private final String BMOB_KEY ="56d23db34c49ab0334c427c034956b15";
     public static UserAuth mCurrentUserAuth;
     public static User mCurrentUser;
+    public static OkHttpClient mHttpClient ;
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        mHttpClient = new OkHttpClient();
         // 初始化 Bmob SDK
         Bmob.initialize(this, BMOB_KEY);
     }
@@ -105,7 +108,8 @@ public class PineApplication extends Application{
      * </p>
      */
     public void onClose() {
-        // NO-OP by default
+        mCurrentUserAuth = null;
+        mCurrentUser = null;
         resetAndfinishActiveContextAll();
     }
 }

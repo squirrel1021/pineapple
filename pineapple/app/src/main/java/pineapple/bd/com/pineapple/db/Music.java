@@ -137,4 +137,21 @@ public class Music extends cn.bmob.v3.BmobObject  {
         this.quality = quality;
     }
 
+    @Override
+    public String toString() {
+        return "Music{" +
+                "id=" + id +
+                ", mediaType=" + mediaType +
+                ", musicType=" + musicType +
+                ", url='" + url + '\'' +
+                ", singer='" + singer + '\'' +
+                ", author='" + author + '\'' +
+                ", poster_url='" + poster_url + '\'' +
+                ", lyrics_url='" + lyrics_url + '\'' +
+                ", name='" + name + '\'' +
+                ", size=" + size +
+                ", albums='" + albums + '\'' +
+                ", quality=" + quality +
+                '}';
+    }
 }

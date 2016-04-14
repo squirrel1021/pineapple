@@ -8,13 +8,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import pineapple.bd.com.pineapple.db.GreenDaoUtils;
 import pineapple.bd.com.pineapple.db.Music;
-import pineapple.bd.com.pineapple.utils.FileUtils;
 import pineapple.bd.com.pineapple.utils.logUtils.Logs;
 
 public class GenerateTablesActivity extends AppCompatActivity {
@@ -29,13 +28,18 @@ public class GenerateTablesActivity extends AppCompatActivity {
     public void createMusicTable() {
         try {
 
-            String json = readFromfile("tables.json", this);
+            String json = readFromAssets("tables.json", this);
 
             Logs.e("music:" + json);
             List<Music> musics = parseList(json, new TypeToken<List<Music>>() {
             });
+           // GreenDaoUtils.insert(GreenDaoUtils.getSession().getMusicDao(), musics);
+            List<Music> ret = GreenDaoUtils.getList(GreenDaoUtils.getSession().getMusicDao());
 
-            Logs.e("music:" + musics.toString());
+            for (Music music :
+                    ret) {
+                Logs.e("music:" + music);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +47,7 @@ public class GenerateTablesActivity extends AppCompatActivity {
         }
     }
 
-    public String readFromfile(String fileName, Context context) {
+    public String readFromAssets(String fileName, Context context) {
         StringBuilder returnString = new StringBuilder();
         InputStream fIn = null;
         InputStreamReader isr = null;

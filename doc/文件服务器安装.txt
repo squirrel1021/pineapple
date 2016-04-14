@@ -1,0 +1,6 @@
+http://www.ahlinux.com/apache/21346.html  --- php
+
+http://www.laozuo.org/4786.html --- owncloud
+
+http://www.cnblogs.com/hazir/archive/2013/05/09/build-your-own-cloud.html --- owncloud
+

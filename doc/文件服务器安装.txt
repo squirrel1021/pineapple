@@ -4,3 +4,8 @@ http://www.laozuo.org/4786.html --- owncloud
 
 http://www.cnblogs.com/hazir/archive/2013/05/09/build-your-own-cloud.html --- owncloud
 
+https://help.ubuntu.com/community/ApacheMySQLPHP
+
+http://doc.download.org/server/9.0/admin_manual/installation/source_installation.html
+https://doc.owncloud.org/server/8.0/admin_manual/installation/installation_wizard.html
+

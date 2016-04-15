@@ -60,11 +60,6 @@
             android:label="@string/title_activity_interest"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".GenerateTablesActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

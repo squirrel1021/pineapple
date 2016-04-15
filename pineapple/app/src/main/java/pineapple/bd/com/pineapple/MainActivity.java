@@ -129,12 +129,18 @@ public class MainActivity extends BaseCoverActivity implements View.OnClickListe
 
     }
 
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    public void loadLocalHeader(Uri savedUri){
+        mHeaderView.setImageURI(savedUri);
+    }
+
     private void setHeaderView() {
        final String localHeaderPath = mAccountService.getLocalHeaderPath(this,PineApplication.mCurrentUserAuth.getIdentify_unique_id());
         if(!TextUtils.isEmpty(localHeaderPath)){
             Uri headerUri = Uri.parse("file:///" + localHeaderPath);
             if(new File(URI.create(headerUri.toString())).exists()){
-                mHeaderView.setImageURI(headerUri);
+                MainActivityPermissionsDispatcher.loadLocalHeaderWithCheck(this,headerUri);
+
             }else if(!TextUtils.isEmpty(PineApplication.mCurrentUser.getAvatar())){
                 String imageUrl = PineApplication.mCurrentUser.getAvatar();
                 if(!TextUtils.isEmpty(imageUrl)){

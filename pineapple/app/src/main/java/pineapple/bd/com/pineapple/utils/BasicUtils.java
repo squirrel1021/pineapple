@@ -1,6 +1,8 @@
 package pineapple.bd.com.pineapple.utils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -369,5 +371,12 @@ public class BasicUtils {
         }
 
         return flag;
+    }
+
+    public static void startActivity(Activity context, String fullActivityName, Intent intent) {
+        ComponentName comp = new ComponentName(context.getPackageName(), fullActivityName);
+        intent.setComponent(comp);
+        context.startActivity(intent);
+        // 这里添加动画
     }
 }

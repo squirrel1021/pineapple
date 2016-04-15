@@ -59,8 +59,16 @@
             android:name=".interest.ui.InterestActivity"
             android:label="@string/title_activity_interest"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".GenerateTablesActivity">
-        </activity>
+        <activity android:name=".GenerateTablesActivity"></activity>
+        <activity android:name=".media.ui.AudioPlayerActivity"></activity>
+
+        <activity android:name=".media.ui.AudioSelectionActivity"></activity>
+
+        <service
+            android:name=".media.AudioService"
+            android:enabled="true"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

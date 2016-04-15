@@ -1,10 +1,13 @@
 package pineapple.bd.com.pineapple.interest.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,6 +21,8 @@ import java.util.List;
 import pineapple.bd.com.pineapple.PineApplication;
 import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.interest.entity.Interest;
+import pineapple.bd.com.pineapple.media.ui.AudioSelectionActivity;
+import pineapple.bd.com.pineapple.utils.BasicUtils;
 
 public class InterestActivity extends AppCompatActivity {
 
@@ -50,6 +55,7 @@ public class InterestActivity extends AppCompatActivity {
         interestMusic.setName("欧美儿歌");
         interestMusic.setImageResId(R.mipmap.children_music);
         interestMusic.setPlateColor(getResources().getColor(R.color.blue_03a9f4));
+        interestMusic.setActionUrl(AudioSelectionActivity.class.getName());
         interests.add(interestMusic);
 
         Interest interestGame = new Interest();
@@ -90,7 +96,7 @@ public class InterestActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Interest interest = interests.get(position);
+            final Interest interest = interests.get(position);
             View layout = View.inflate(PineApplication.mContext, R.layout.intertest_grid_item, null);
             ImageView mPlateImage = (ImageView) layout.findViewById(R.id.iv_plate);
             TextView mPlateText = (TextView) layout.findViewById(R.id.tv_plate);
@@ -98,7 +104,20 @@ public class InterestActivity extends AppCompatActivity {
             mPlateImage.setImageResource(interest.getImageResId());
             mPlateColor.setBackgroundColor(interest.getPlateColor());
             mPlateText.setText(interest.getName());
+            if(!TextUtils.isEmpty(interest.getActionUrl())){
+                layout.setOnClickListener(getMusicRepoListener(interest));
+            }
             return layout;
+        }
+
+        @NonNull
+        private View.OnClickListener getMusicRepoListener(final Interest interest) {
+            return new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BasicUtils.startActivity(InterestActivity.this,interest.getActionUrl(),new Intent());
+                }
+            };
         }
     }
 

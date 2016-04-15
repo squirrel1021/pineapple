@@ -13,6 +13,7 @@ import cn.bmob.v3.Bmob;
 import okhttp3.OkHttpClient;
 import pineapple.bd.com.pineapple.db.User;
 import pineapple.bd.com.pineapple.db.UserAuth;
+import pineapple.bd.com.pineapple.media.PlaylistManager;
 
 /**
  * Description : <Content><br>
@@ -31,6 +32,7 @@ public class PineApplication extends Application{
     public static UserAuth mCurrentUserAuth;
     public static User mCurrentUser;
     public static OkHttpClient mHttpClient ;
+    private static PlaylistManager playlistManager;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,7 +40,12 @@ public class PineApplication extends Application{
         mHttpClient = new OkHttpClient();
         // 初始化 Bmob SDK
         Bmob.initialize(this, BMOB_KEY);
+        playlistManager = new PlaylistManager();
     }
+    public static PlaylistManager getPlaylistManager() {
+        return playlistManager;
+    }
+
 
     private ConcurrentHashMap<String, WeakReference<Context>> contextObjects = new ConcurrentHashMap<String, WeakReference<Context>>();
 
@@ -111,5 +118,13 @@ public class PineApplication extends Application{
         mCurrentUserAuth = null;
         mCurrentUser = null;
         resetAndfinishActiveContextAll();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        mContext = null;
+        playlistManager = null;
     }
 }

@@ -31,8 +31,8 @@ public class PineappleGenerator {
     private static void addMusic(Schema schema) {
         Entity music = schema.addEntity("Music");
         music.addIdProperty();
-        music.addIntProperty("mediaType");//eg: mp3
-        music.addIntProperty("musicType");//eg:儿歌，英文
+        music.addStringProperty("mediaType");//eg: mp3
+        music.addStringProperty("musicType");//eg:儿歌，英文
         music.addStringProperty("url");
         music.addStringProperty("singer");
         music.addStringProperty("author");

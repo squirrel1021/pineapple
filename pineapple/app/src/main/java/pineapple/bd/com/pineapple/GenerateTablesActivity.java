@@ -22,7 +22,7 @@ public class GenerateTablesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_tables);
-        createMusicTable();
+        //createMusicTable();
     }
 
     public void createMusicTable() {

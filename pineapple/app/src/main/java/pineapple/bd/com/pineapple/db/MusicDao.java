@@ -24,8 +24,8 @@ public class MusicDao extends AbstractDao<Music, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property MediaType = new Property(1, Integer.class, "mediaType", false, "MEDIA_TYPE");
-        public final static Property MusicType = new Property(2, Integer.class, "musicType", false, "MUSIC_TYPE");
+        public final static Property MediaType = new Property(1, String.class, "mediaType", false, "MEDIA_TYPE");
+        public final static Property MusicType = new Property(2, String.class, "musicType", false, "MUSIC_TYPE");
         public final static Property Url = new Property(3, String.class, "url", false, "URL");
         public final static Property Singer = new Property(4, String.class, "singer", false, "SINGER");
         public final static Property Author = new Property(5, String.class, "author", false, "AUTHOR");
@@ -51,8 +51,8 @@ public class MusicDao extends AbstractDao<Music, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"MUSIC\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"MEDIA_TYPE\" INTEGER," + // 1: mediaType
-                "\"MUSIC_TYPE\" INTEGER," + // 2: musicType
+                "\"MEDIA_TYPE\" TEXT," + // 1: mediaType
+                "\"MUSIC_TYPE\" TEXT," + // 2: musicType
                 "\"URL\" TEXT," + // 3: url
                 "\"SINGER\" TEXT," + // 4: singer
                 "\"AUTHOR\" TEXT," + // 5: author
@@ -80,14 +80,14 @@ public class MusicDao extends AbstractDao<Music, Long> {
             stmt.bindLong(1, id);
         }
  
-        Integer mediaType = entity.getMediaType();
+        String mediaType = entity.getMediaType();
         if (mediaType != null) {
-            stmt.bindLong(2, mediaType);
+            stmt.bindString(2, mediaType);
         }
  
-        Integer musicType = entity.getMusicType();
+        String musicType = entity.getMusicType();
         if (musicType != null) {
-            stmt.bindLong(3, musicType);
+            stmt.bindString(3, musicType);
         }
  
         String url = entity.getUrl();
@@ -147,8 +147,8 @@ public class MusicDao extends AbstractDao<Music, Long> {
     public Music readEntity(Cursor cursor, int offset) {
         Music entity = new Music( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // mediaType
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // musicType
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // mediaType
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // musicType
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // url
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // singer
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // author
@@ -166,8 +166,8 @@ public class MusicDao extends AbstractDao<Music, Long> {
     @Override
     public void readEntity(Cursor cursor, Music entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setMediaType(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setMusicType(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setMediaType(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setMusicType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setSinger(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setAuthor(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));

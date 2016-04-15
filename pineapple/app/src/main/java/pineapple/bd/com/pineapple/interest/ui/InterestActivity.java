@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,23 +45,30 @@ public class InterestActivity extends AppCompatActivity {
 
     private void setupInterestGridView() {
         mGrid = (GridView) findViewById(R.id.grid);
+        List<Interest> interests = new ArrayList<>();
+        Interest interestMusic = new Interest();
+        interestMusic.setName("欧美儿歌");
+        interestMusic.setImageResId(R.mipmap.children_music);
+        interestMusic.setPlateColor(getResources().getColor(R.color.blue_03a9f4));
+        interests.add(interestMusic);
 
-        ArrayList<Interest> interests = new ArrayList<>();
+        Interest interestGame = new Interest();
+        interestGame.setName("益智游戏");
+        interestGame.setImageResId(R.mipmap.children_game);
+        interestGame.setPlateColor(getResources().getColor(R.color.yellow_ff9800));
+        interests.add(interestGame);
 
-        for(int i=0;i<6;i++){
-            interests.add(new Interest());
-        }
 
         mGrid.setAdapter(new GridAdapter(interests));
 
     }
 
 
-    class GridAdapter extends BaseAdapter{
+    class GridAdapter extends BaseAdapter {
 
         private List<Interest> interests;
 
-        public GridAdapter(List<Interest> interests){
+        public GridAdapter(List<Interest> interests) {
             this.interests = interests;
         }
 
@@ -81,9 +90,14 @@ public class InterestActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
+            Interest interest = interests.get(position);
             View layout = View.inflate(PineApplication.mContext, R.layout.intertest_grid_item, null);
-
+            ImageView mPlateImage = (ImageView) layout.findViewById(R.id.iv_plate);
+            TextView mPlateText = (TextView) layout.findViewById(R.id.tv_plate);
+            View mPlateColor = layout.findViewById(R.id.color_plate);
+            mPlateImage.setImageResource(interest.getImageResId());
+            mPlateColor.setBackgroundColor(interest.getPlateColor());
+            mPlateText.setText(interest.getName());
             return layout;
         }
     }

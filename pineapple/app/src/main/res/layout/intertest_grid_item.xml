@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <View
+        android:id="@+id/color_plate"
+        android:background="@color/blue_03a9f4"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"></View>
 
     <ImageView
-        android:src="@color/yellow_ef6c00"
-        android:layout_margin="2dp"
-        android:layout_width="match_parent"
-        android:layout_height="100dp" />
-    <TextView
-        android:text="@string/en_children_songs"
-        android:layout_centerInParent="true"
-        android:textSize="16sp"
+        android:id="@+id/iv_plate"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/children_music" />
+
+    <TextView
+        android:id="@+id/tv_plate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_plate"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/en_children_songs"
         android:textColor="@android:color/white"
-        android:layout_height="wrap_content" />
+        android:textSize="16sp" />
 
 </RelativeLayout>

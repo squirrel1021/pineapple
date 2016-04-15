@@ -7,8 +7,8 @@ package pineapple.bd.com.pineapple.db;
 public class Music extends cn.bmob.v3.BmobObject  {
 
     private Long id;
-    private Integer mediaType;
-    private Integer musicType;
+    private String mediaType;
+    private String musicType;
     private String url;
     private String singer;
     private String author;
@@ -26,7 +26,7 @@ public class Music extends cn.bmob.v3.BmobObject  {
         this.id = id;
     }
 
-    public Music(Long id, Integer mediaType, Integer musicType, String url, String singer, String author, String poster_url, String lyrics_url, String name, Long size, String albums, Integer quality) {
+    public Music(Long id, String mediaType, String musicType, String url, String singer, String author, String poster_url, String lyrics_url, String name, Long size, String albums, Integer quality) {
         this.id = id;
         this.mediaType = mediaType;
         this.musicType = musicType;
@@ -49,19 +49,19 @@ public class Music extends cn.bmob.v3.BmobObject  {
         this.id = id;
     }
 
-    public Integer getMediaType() {
+    public String getMediaType() {
         return mediaType;
     }
 
-    public void setMediaType(Integer mediaType) {
+    public void setMediaType(String mediaType) {
         this.mediaType = mediaType;
     }
 
-    public Integer getMusicType() {
+    public String getMusicType() {
         return musicType;
     }
 
-    public void setMusicType(Integer musicType) {
+    public void setMusicType(String musicType) {
         this.musicType = musicType;
     }
 
@@ -137,21 +137,4 @@ public class Music extends cn.bmob.v3.BmobObject  {
         this.quality = quality;
     }
 
-    @Override
-    public String toString() {
-        return "Music{" +
-                "id=" + id +
-                ", mediaType=" + mediaType +
-                ", musicType=" + musicType +
-                ", url='" + url + '\'' +
-                ", singer='" + singer + '\'' +
-                ", author='" + author + '\'' +
-                ", poster_url='" + poster_url + '\'' +
-                ", lyrics_url='" + lyrics_url + '\'' +
-                ", name='" + name + '\'' +
-                ", size=" + size +
-                ", albums='" + albums + '\'' +
-                ", quality=" + quality +
-                '}';
-    }
 }

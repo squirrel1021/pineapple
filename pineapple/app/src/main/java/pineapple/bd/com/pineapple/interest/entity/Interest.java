@@ -7,9 +7,11 @@ public class Interest {
 
     String name;
 
-    String imageUrl;
+    int imageResId;
 
     String actionUrl;
+
+    int plateColor;
 
     public String getName() {
         return name;
@@ -19,12 +21,12 @@ public class Interest {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public int getImageResId() {
+        return imageResId;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageResId(int imageResId) {
+        this.imageResId = imageResId;
     }
 
     public String getActionUrl() {
@@ -33,5 +35,13 @@ public class Interest {
 
     public void setActionUrl(String actionUrl) {
         this.actionUrl = actionUrl;
+    }
+
+    public void setPlateColor(int plateColor) {
+        this.plateColor = plateColor;
+    }
+
+    public int getPlateColor() {
+        return plateColor;
     }
 }

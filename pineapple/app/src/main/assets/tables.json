@@ -1,14 +1,27 @@
 [
   {
-    "mediaType":"儿歌",
+    "mediaType":".mp3",
+    "musicType":"EN,轻音乐",
+    "url":"http://music.baidutt.com/up/kwcywucm/dmckkd.mp3",
+    "singer":"班得瑞",
+    "author":"班得瑞",
+    "poster_url":"http://file.bmob.cn/M03/34/56/oYYBAFcUXBCADuToAAPP1ryQ8-0665.jpg",
+    "lyrics_url":"",
+    "name":"春野-山溪",
+    "size":0,
+    "albums":"",
+    "quality":2
+  },
+  {
+    "mediaType":".mp3",
     "musicType":"EN",
-    "url":"http://v28.yunpan.cn/Download.outputAudio/434001213/55f0cb49c2d7f5ffc2a84434632d51bb8949fac3/28_28.73cd51e41157ceda6787269e4caf44f6/1.0.1/web/14605347138673/0/edcc2750eb2cecb930ae0ef35fea8f7e/WeeSing-Bi.mp3",
-    "singer":"WeeSing",
+    "url":"http://music.baidutt.com/up/kwcywucm/cpuaum.mp3",
+    "singer":"Taylor Swift",
     "author":"",
     "poster_url":"",
     "lyrics_url":"",
-    "name":"Bingo",
-    "size":1680061,
+    "name":"Love Story",
+    "size":0,
     "albums":"",
     "quality":2
   }

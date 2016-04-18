@@ -73,8 +73,8 @@ public class FileUploader implements Callable<Boolean> {
         bmobFile.uploadblock(PineApplication.mContext, new UploadFileListener() {
             @Override
             public void onSuccess() {
-                Logs.e("bmobFile upload onSuccess: " + bmobFile.getUrl());
-                FileUploader.this.mUploadListener.onSuccess(mFile,bmobFile.getUrl());
+                Logs.e("bmobFile upload onSuccess: " + bmobFile.getFileUrl(PineApplication.mContext));
+                FileUploader.this.mUploadListener.onSuccess(mFile,bmobFile.getFileUrl(PineApplication.mContext));
             }
 
             @Override

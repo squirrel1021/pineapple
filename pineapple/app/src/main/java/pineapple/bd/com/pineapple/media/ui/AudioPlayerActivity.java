@@ -63,6 +63,14 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
 
         retrieveExtras();
         init();
+
+        updateTitle("");
+    }
+
+    private void updateTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 
     @Override
@@ -91,6 +99,8 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
 
         //Loads the new image
         picasso.load(currentItem.getArtworkUrl()).into(artworkView);
+
+        updateTitle(currentItem.getTitle());
 
         return true;
     }
@@ -280,6 +290,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
         previousButton = (ImageButton)findViewById(R.id.audio_player_previous);
         playPauseButton = (ImageButton)findViewById(R.id.audio_player_play_pause);
         nextButton = (ImageButton)findViewById(R.id.audio_player_next);
+
     }
 
     /**

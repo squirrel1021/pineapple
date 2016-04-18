@@ -7,8 +7,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
 import pineapple.bd.com.pineapple.R;
+import pineapple.bd.com.pineapple.db.Music;
 import pineapple.bd.com.pineapple.media.adapter.AudioSelectionListAdapter;
+import pineapple.bd.com.pineapple.media.entity.AudioItems;
 
 /**
  * A simple activity that allows the user to select a
@@ -16,6 +22,8 @@ import pineapple.bd.com.pineapple.media.adapter.AudioSelectionListAdapter;
  * (limited to chapters 1 - 4).
  */
 public class AudioSelectionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+    private AudioSelectionListAdapter audioSelectionListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +35,28 @@ public class AudioSelectionActivity extends AppCompatActivity implements Adapter
         }
 
         ListView exampleList = (ListView) findViewById(R.id.selection_activity_list);
-        exampleList.setAdapter(new AudioSelectionListAdapter(this));
+        audioSelectionListAdapter = new AudioSelectionListAdapter(this);
+        exampleList.setAdapter(audioSelectionListAdapter);
         exampleList.setOnItemClickListener(this);
+        setupData();
+    }
+
+    private void setupData() {
+        BmobQuery<Music> bq = new BmobQuery<Music>();
+        bq.findObjects(this, new FindListener<Music>(){
+            @Override
+            public void onSuccess(List<Music> list) {
+                for (Music music: list) {
+                    AudioItems.addAudioItem(new AudioItems.AudioItem(music.getName(),music.getUrl(),music.getPoster_url()));
+                }
+                audioSelectionListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+        });
     }
 
     @Override

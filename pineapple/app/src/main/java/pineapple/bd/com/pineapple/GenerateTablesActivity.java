@@ -44,7 +44,7 @@ public class GenerateTablesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_tables);
-        GenerateTablesActivityPermissionsDispatcher.uploadFileWithCheck(this);
+       GenerateTablesActivityPermissionsDispatcher.uploadFileWithCheck(this);
     }
 
     @NeedsPermission({Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})

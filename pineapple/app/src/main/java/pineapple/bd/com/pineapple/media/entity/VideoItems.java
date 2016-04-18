@@ -1,14 +1,13 @@
 package pineapple.bd.com.pineapple.media.entity;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class VideoItems {
-    private final static List<VideoItem> items;
+    private final static List<VideoItem> items = new ArrayList<>();
 
     static {
-        items = new ArrayList<>();
-
         items.add(new VideoItem("3GP - Big Buck Bunny by Blender", "http://www.sample-videos.com/video/3gp/240/big_buck_bunny_240p_10mb.3gp"));
 //        items.add(new VideoItem("FLV - Big Buck Bunny by Blender", "http://www.sample-videos.com/video/flv/720/big_buck_bunny_720p_5mb.flv"));
         items.add(new VideoItem("HLS - Wildlife", "http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8"));

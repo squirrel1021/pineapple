@@ -296,6 +296,7 @@ public class AccountService {
             uAuth.setVerified(userAuth.getVerified());
             uAuth.setOnLineType(userAuth.getOnLineType());
             uAuth.setIdentity_type(userAuth.getIdentity_type());
+            uAuth.setUpdate_time(System.currentTimeMillis());
             dao.update(uAuth);
             //printDb();
         } else {

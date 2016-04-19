@@ -14,6 +14,9 @@ import okhttp3.OkHttpClient;
 import pineapple.bd.com.pineapple.db.User;
 import pineapple.bd.com.pineapple.db.UserAuth;
 import pineapple.bd.com.pineapple.media.PlaylistManager;
+import pineapple.bd.com.pineapple.utils.JniUtils;
+import pineapple.bd.com.pineapple.utils.logUtils.Logs;
+
 
 /**
  * Description : <Content><br>
@@ -28,7 +31,6 @@ import pineapple.bd.com.pineapple.media.PlaylistManager;
 public class PineApplication extends Application{
 
     public static PineApplication mContext;
-    private final String BMOB_KEY ="56d23db34c49ab0334c427c034956b15";
     public static UserAuth mCurrentUserAuth;
     public static User mCurrentUser;
     public static OkHttpClient mHttpClient ;
@@ -39,7 +41,7 @@ public class PineApplication extends Application{
         mContext = this;
         mHttpClient = new OkHttpClient();
         // 初始化 Bmob SDK
-        Bmob.initialize(this, BMOB_KEY);
+        Bmob.initialize(this, JniUtils.getKey());
         playlistManager = new PlaylistManager();
     }
     public static PlaylistManager getPlaylistManager() {

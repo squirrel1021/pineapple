@@ -47,7 +47,7 @@ public class AudioSelectionActivity extends AppCompatActivity implements Adapter
             @Override
             public void onSuccess(List<Music> list) {
                 for (Music music: list) {
-                    AudioItems.addAudioItem(new AudioItems.AudioItem(music.getName(),music.getUrl(),music.getPoster_url()));
+                    AudioItems.addAudioItem(new AudioItems.AudioItem(music.getName(),music.getUrl(),music.getPoster_url(),music.getAlbums(),music.getSinger()));
                 }
                 audioSelectionListAdapter.notifyDataSetChanged();
             }

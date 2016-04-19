@@ -12,11 +12,15 @@ public class MediaItem implements EMPlaylistManager.PlaylistItem {
     private String mediaUrl;
     private String title;
     boolean isAudio;
+    private String album;
+    private String artist;
 
     public MediaItem(AudioItems.AudioItem audioItem) {
         artworkUrl = audioItem.getArtworkUrl();
         mediaUrl = audioItem.getMediaUrl();
         title = audioItem.getTitle();
+        album = audioItem.getAlbum();
+        artist = audioItem.getArtist();
         isAudio = true;
     }
 
@@ -69,11 +73,11 @@ public class MediaItem implements EMPlaylistManager.PlaylistItem {
 
     @Override
     public String getAlbum() {
-        return "ExoMedia Demo";
+        return album;
     }
 
     @Override
     public String getArtist() {
-        return "Unknown Artist";
+        return artist;
     }
 }

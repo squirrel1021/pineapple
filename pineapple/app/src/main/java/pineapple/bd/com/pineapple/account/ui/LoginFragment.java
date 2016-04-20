@@ -52,7 +52,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mFragmentLayout = inflater.inflate(R.layout.fragment_register, container, false);
+        mFragmentLayout = inflater.inflate(R.layout.fragment_button, container, false);
         mBtnCommit = (Button) mFragmentLayout.findViewById(R.id.commit);
         mBtnCommit.setText(R.string.btn_login_text);
         resumeAuth();

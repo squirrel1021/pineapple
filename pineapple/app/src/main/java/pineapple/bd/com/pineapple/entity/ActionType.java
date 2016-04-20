@@ -19,6 +19,7 @@ public enum ActionType implements Serializable{
 
     REGISTER,
     LOGIN,
+    LOCAL_LOGIN,
     LOGOUT;
 
 

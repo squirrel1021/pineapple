@@ -8,50 +8,62 @@
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
     <FrameLayout
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:fitsSystemWindows="true">
 
         <ImageView
-            android:layout_marginTop="150dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@mipmap/ic_launcher"
             android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="150dp"
+            android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:id="@+id/controls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="60dp"
             android:background="@android:color/transparent"
             android:orientation="horizontal"
             android:weightSum="2"
             tools:ignore="UselessParent">
 
             <Button
-                android:textColor="@android:color/white"
                 android:id="@+id/btn_register"
                 android:layout_width="0dp"
-                android:layout_margin="40dp"
                 android:layout_height="45dp"
+                android:layout_margin="40dp"
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
-                android:text="@string/btn_register_text" />
+                android:text="@string/btn_register_text"
+                android:textColor="@android:color/white" />
 
             <Button
-                android:textColor="@android:color/white"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="40dp"
                 android:id="@+id/btn_login"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="40dp"
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
-                android:text="@string/btn_login_text" />
+                android:text="@string/btn_login_text"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_local_login"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="@null"
+            android:text="本地登录"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
     </FrameLayout>
 
 </FrameLayout>

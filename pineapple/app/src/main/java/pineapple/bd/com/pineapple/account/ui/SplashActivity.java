@@ -10,6 +10,7 @@ import pineapple.bd.com.pineapple.db.User;
 import pineapple.bd.com.pineapple.db.UserAuth;
 import pineapple.bd.com.pineapple.entity.ActionType;
 import pineapple.bd.com.pineapple.R;
+import pineapple.bd.com.pineapple.interest.ui.InterestActivity;
 import pineapple.bd.com.pineapple.utils.BasicUtils;
 
 /**
@@ -25,16 +26,18 @@ import pineapple.bd.com.pineapple.utils.BasicUtils;
 public class SplashActivity extends Activity {
 
     public static final String ACTION_TYPE = "actionType";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PineApplication.mContext.setActiveContext(SplashActivity.this,SplashActivity.class.getName());
+        PineApplication.mContext.setActiveContext(SplashActivity.this, SplashActivity.class.getName());
         setContentView(R.layout.activity_splash);
         findViewById(R.id.btn_register).setOnClickListener(getListener(ActionType.REGISTER));
         findViewById(R.id.btn_login).setOnClickListener(getListener(ActionType.LOGIN));
+        findViewById(R.id.btn_local_login).setOnClickListener(getListener(ActionType.LOCAL_LOGIN));
         //test 时候用来初始化表
-       // new User(1l,"","kevin","123",1,"kill bx","code").save(this);
-      //  new UserAuth(1l,"123",1,1,"123","123",true,System.currentTimeMillis()).save(this);
+        // new User(1l,"","kevin","123",1,"kill bx","code").save(this);
+        //  new UserAuth(1l,"123",1,1,"123","123",true,System.currentTimeMillis()).save(this);
     }
 
     @NonNull
@@ -42,7 +45,12 @@ public class SplashActivity extends Activity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BasicUtils.sendIntent(SplashActivity.this, AuthActivity.class, ACTION_TYPE, actionType);
+                if (actionType == ActionType.LOCAL_LOGIN) {
+                    BasicUtils.sendIntent(SplashActivity.this, InterestActivity.class, ACTION_TYPE, actionType);
+                } else {
+                    BasicUtils.sendIntent(SplashActivity.this, AuthActivity.class, ACTION_TYPE, actionType);
+                }
+
             }
         };
     }

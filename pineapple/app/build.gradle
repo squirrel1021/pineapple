@@ -48,7 +48,7 @@ dependencies {
     compile 'com.devbrackets.android:exomedia:2.5.6'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.shiraji.permissionsdispatcher:permissionsdispatcher:c79f0cf2c7'
-
+    compile 'jp.wasabeef:blurry:2.0.2'
 }
 
 

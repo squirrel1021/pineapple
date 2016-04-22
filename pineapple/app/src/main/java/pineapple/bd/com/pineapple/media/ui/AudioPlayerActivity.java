@@ -1,7 +1,10 @@
 package pineapple.bd.com.pineapple.media.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,12 +19,14 @@ import com.devbrackets.android.exomedia.listener.EMProgressCallback;
 import com.devbrackets.android.exomedia.manager.EMPlaylistManager;
 import com.devbrackets.android.exomedia.service.EMPlaylistService;
 import com.devbrackets.android.exomedia.util.TimeFormatUtil;
-
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.wasabeef.blurry.Blurry;
 import pineapple.bd.com.pineapple.PineApplication;
 import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.media.PlaylistManager;
@@ -55,16 +60,30 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
     private int selectedIndex = 0;
 
     private Picasso picasso;
+    private ImageView blurArtworkView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_player);
-
         retrieveExtras();
         init();
-
         updateTitle("");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateTitle(String title) {
@@ -98,7 +117,21 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
         previousButton.setEnabled(hasPrevious);
 
         //Loads the new image
-        picasso.load(currentItem.getArtworkUrl()).into(artworkView);
+        picasso.load(currentItem.getArtworkUrl()).into(artworkView, new Callback() {
+            @Override
+            public void onSuccess() {
+                try {
+                    Blurry.with(PineApplication.mContext).sampling(2).capture(artworkView).into(blurArtworkView);
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
 
         updateTitle(currentItem.getTitle());
 
@@ -141,7 +174,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
 
         if (!userInteracting) {
             seekBar.setSecondaryProgress((int) (event.getDuration() * event.getBufferPercentFloat()));
-            seekBar.setProgress((int)event.getPosition());
+            seekBar.setProgress((int) event.getPosition());
             currentPositionView.setText(TimeFormatUtil.formatMs(event.getPosition()));
         }
 
@@ -221,7 +254,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
     public void loadCompleted() {
         playPauseButton.setVisibility(View.VISIBLE);
         previousButton.setVisibility(View.VISIBLE);
-        nextButton.setVisibility(View.VISIBLE );
+        nextButton.setVisibility(View.VISIBLE);
 
         loadingBar.setVisibility(View.INVISIBLE);
     }
@@ -233,7 +266,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
     public void restartLoading() {
         playPauseButton.setVisibility(View.INVISIBLE);
         previousButton.setVisibility(View.INVISIBLE);
-        nextButton.setVisibility(View.INVISIBLE );
+        nextButton.setVisibility(View.INVISIBLE);
 
         loadingBar.setVisibility(View.VISIBLE);
     }
@@ -244,7 +277,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
      * @param duration The duration of the media item in milliseconds
      */
     private void setDuration(long duration) {
-        seekBar.setMax((int)duration);
+        seekBar.setMax((int) duration);
         durationView.setText(TimeFormatUtil.formatMs(duration));
     }
 
@@ -279,17 +312,19 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
      * xml layout file.
      */
     private void retrieveViews() {
-        loadingBar = (ProgressBar)findViewById(R.id.audio_player_loading);
-        artworkView = (ImageView)findViewById(R.id.audio_player_image);
+        loadingBar = (ProgressBar) findViewById(R.id.audio_player_loading);
+        artworkView = (ImageView) findViewById(R.id.audio_player_image);
+        blurArtworkView = (ImageView) findViewById(R.id.audio_player_blur);
 
-        currentPositionView = (TextView)findViewById(R.id.audio_player_position);
-        durationView = (TextView)findViewById(R.id.audio_player_duration);
+        currentPositionView = (TextView) findViewById(R.id.audio_player_position);
+        durationView = (TextView) findViewById(R.id.audio_player_duration);
 
-        seekBar = (SeekBar)findViewById(R.id.audio_player_seek);
+        seekBar = (SeekBar) findViewById(R.id.audio_player_seek);
 
-        previousButton = (ImageButton)findViewById(R.id.audio_player_previous);
-        playPauseButton = (ImageButton)findViewById(R.id.audio_player_play_pause);
-        nextButton = (ImageButton)findViewById(R.id.audio_player_next);
+        previousButton = (ImageButton) findViewById(R.id.audio_player_previous);
+        playPauseButton = (ImageButton) findViewById(R.id.audio_player_play_pause);
+        nextButton = (ImageButton) findViewById(R.id.audio_player_next);
+
 
     }
 

@@ -1,6 +1,10 @@
 # pineapple
 
-![guide](art/SVID_20160423_170842.mp4)
+![guide one](art/guide_one.png)
+
+![guide two](art/guide_two.png)
+
+![guide three](art/guide_three.png)
 
 pineapple is good luck
 

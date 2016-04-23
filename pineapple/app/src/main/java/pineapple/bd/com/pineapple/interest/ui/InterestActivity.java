@@ -78,6 +78,12 @@ public class InterestActivity extends AppCompatActivity {
         interestGame.setPlateColor(getResources().getColor(R.color.yellow_ff9800));
         interests.add(interestGame);
 
+        Interest interestHourseKeeper = new Interest();
+        interestHourseKeeper.setName("家庭管家");
+        interestHourseKeeper.setImageResId(R.mipmap.hoursekeeper);
+        interestHourseKeeper.setPlateColor(getResources().getColor(R.color.green_009688));
+        interests.add(interestHourseKeeper);
+
 
         mGrid.setAdapter(new GridAdapter(interests));
 

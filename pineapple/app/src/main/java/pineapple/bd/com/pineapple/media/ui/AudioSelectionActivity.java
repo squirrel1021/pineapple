@@ -16,13 +16,14 @@ import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.db.Music;
 import pineapple.bd.com.pineapple.media.adapter.AudioSelectionListAdapter;
 import pineapple.bd.com.pineapple.media.entity.AudioItems;
+import pineapple.bd.com.pineapple.utils.BaseCoverActivity;
 
 /**
  * A simple activity that allows the user to select a
  * chapter form "The Count of Monte Cristo" to play
  * (limited to chapters 1 - 4).
  */
-public class AudioSelectionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class AudioSelectionActivity extends BaseCoverActivity implements AdapterView.OnItemClickListener {
 
     private AudioSelectionListAdapter audioSelectionListAdapter;
 
@@ -58,6 +59,7 @@ public class AudioSelectionActivity extends AppCompatActivity implements Adapter
         bq.findObjects(this, new FindListener<Music>(){
             @Override
             public void onSuccess(List<Music> list) {
+                AudioItems.clear();
                 for (Music music: list) {
                     AudioItems.addAudioItem(new AudioItems.AudioItem(music.getName(),music.getUrl(),music.getPoster_url(),music.getAlbums(),music.getSinger()));
                 }

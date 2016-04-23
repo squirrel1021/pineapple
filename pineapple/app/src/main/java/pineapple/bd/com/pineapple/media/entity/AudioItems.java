@@ -11,6 +11,10 @@ public class AudioItems {
         return items;
     }
 
+    public static void clear(){
+        items.clear();
+    }
+
     public static List<AudioItem> getItems() {
         return items;
     }

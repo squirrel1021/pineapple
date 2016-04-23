@@ -1,11 +1,17 @@
 package pineapple.bd.com.pineapple.media.ui;
 
+import android.Manifest;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -21,23 +27,34 @@ import com.devbrackets.android.exomedia.service.EMPlaylistService;
 import com.devbrackets.android.exomedia.util.TimeFormatUtil;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Transformation;
 
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import jp.wasabeef.blurry.Blurry;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 import pineapple.bd.com.pineapple.PineApplication;
 import pineapple.bd.com.pineapple.R;
 import pineapple.bd.com.pineapple.media.PlaylistManager;
 import pineapple.bd.com.pineapple.media.entity.AudioItems;
 import pineapple.bd.com.pineapple.media.entity.MediaItem;
+import pineapple.bd.com.pineapple.utils.AESUtil;
+import pineapple.bd.com.pineapple.utils.BitmapUtil;
+import pineapple.bd.com.pineapple.utils.FileUtils;
+import pineapple.bd.com.pineapple.utils.logUtils.Logs;
+
 
 /**
  * An example activity to show how to implement and audio UI
  * that interacts with the {@link EMPlaylistService} and {@link EMPlaylistManager}
  * classes.
  */
+@RuntimePermissions
 public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylistServiceCallback, EMProgressCallback {
     public static final String EXTRA_INDEX = "EXTRA_INDEX";
     public static final int PLAYLIST_ID = 4; //Arbitrary, for the example
@@ -61,12 +78,24 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
 
     private Picasso picasso;
     private ImageView blurArtworkView;
+    private String mCurrentDataDir;
+    private File blurArtworkImagePath;
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AudioPlayerActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_player);
+        try {
+            mCurrentDataDir = FileUtils.getCurrentDataPath(AudioPlayerActivity.this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         retrieveExtras();
         init();
         updateTitle("");
@@ -96,35 +125,57 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
     protected void onPause() {
         super.onPause();
         playlistManager.unRegisterServiceCallbacks(this);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         playlistManager = PineApplication.mContext.getPlaylistManager();
+        resumeBlurArtworkImage();
         playlistManager.registerServiceCallbacks(this);
+
 
         //Makes sure to retrieve the current playback information
         updateCurrentPlaybackInformation();
     }
 
+    private void resumeBlurArtworkImage() {
+        try {
+            blurArtworkImagePath = new File(mCurrentDataDir + AESUtil.encrypt("kevin", playlistManager.getCurrentItem().getArtworkUrl()) + ".jpg");
+            if (blurArtworkImagePath.exists()) {
+                picasso.load(blurArtworkImagePath).into(blurArtworkView);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public boolean onPlaylistItemChanged(EMPlaylistManager.PlaylistItem currentItem, boolean hasNext, boolean hasPrevious) {
         shouldSetDuration = true;
-
         //Updates the button states
         nextButton.setEnabled(hasNext);
         previousButton.setEnabled(hasPrevious);
-
         //Loads the new image
-        picasso.load(currentItem.getArtworkUrl()).into(artworkView, new Callback() {
+//        loadArtworkView(currentItem);
+        AudioPlayerActivityPermissionsDispatcher.loadArtworkViewWithCheck(this, currentItem);
+        updateTitle(currentItem.getTitle());
+
+        return true;
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void loadArtworkView(final EMPlaylistManager.PlaylistItem currentItem) {
+        picasso.load(currentItem.getArtworkUrl()).transform(new BlurTransformer(currentItem.getArtworkUrl())).into(artworkView, new Callback() {
             @Override
             public void onSuccess() {
-                try {
-                    Blurry.with(PineApplication.mContext).sampling(2).capture(artworkView).into(blurArtworkView);
-                } catch (Exception e) {
-
-                }
+                RotateAnimation ra = new RotateAnimation(0, 360, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+                ra.setRepeatMode(Animation.INFINITE);
+                ra.setRepeatCount(Animation.INFINITE);
+                ra.setDuration(12000l);
+                ra.setInterpolator(new LinearInterpolator());
+                artworkView.startAnimation(ra);
             }
 
             @Override
@@ -133,10 +184,50 @@ public class AudioPlayerActivity extends AppCompatActivity implements EMPlaylist
             }
         });
 
-        updateTitle(currentItem.getTitle());
-
-        return true;
     }
+
+    class BlurTransformer implements Transformation {
+
+        private String uri;
+
+        public BlurTransformer(String uri) {
+            this.uri = uri;
+        }
+
+        @Override
+        public Bitmap transform(Bitmap source) {
+            final Bitmap blur = BitmapUtil.doBlur(source, 25, false);
+            setBlurArtworkView(blur);
+            cacheBlurView(blur);
+            return source;
+        }
+
+        @Override
+        public String key() {
+            return this.uri;
+        }
+    }
+
+    private void cacheBlurView(Bitmap blur) {
+        try {
+            if (!blurArtworkImagePath.exists()) {
+                FileOutputStream o = new FileOutputStream(blurArtworkImagePath);
+                blur.compress(Bitmap.CompressFormat.JPEG, 100, o);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setBlurArtworkView(final Bitmap blur) {
+        new Handler(AudioPlayerActivity.this.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                blurArtworkView.setImageBitmap(blur);
+            }
+        });
+    }
+
 
     @Override
     public boolean onMediaStateChanged(EMPlaylistService.MediaState mediaState) {
